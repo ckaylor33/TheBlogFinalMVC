@@ -11,7 +11,7 @@ namespace TheBlogFinalMVC.Models
 
         public int PostId { get; set; } //relates comment to it's parent post
 
-        public string AuthorId { get; set; } //relates comment to the user
+        public string BlogUserId { get; set; } //relates comment to the user
 
         public string ModeratorId { get; set; }
 
@@ -38,7 +38,7 @@ namespace TheBlogFinalMVC.Models
         //Navigation Properties
         public virtual Post Post { get; set; } //holds record represented by PostId
         
-        public virtual BlogUser Author { get; set; } //holds record represented by AuthorId
+        public virtual BlogUser BlogUser { get; set; } //holds record represented by AuthorId
 
         public virtual BlogUser Moderator { get; set; } //use moderatorId string to go from the comment to IdentityUser record represnted by the single string
 

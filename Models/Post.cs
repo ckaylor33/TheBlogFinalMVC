@@ -14,7 +14,7 @@ namespace TheBlogFinalMVC.Models
 
         public int BlogId { get; set; } //foreign key
 
-        public string AuthorId { get; set; } //whoever wrote the post - string by default under IdentityUser
+        public string BlogUserId { get; set; } //whoever wrote the post - string by default under IdentityUser
 
         [Required]
         [StringLength(75, ErrorMessage = "The {0} must be at least {2} and no more than {1} characters long.", MinimumLength = 2)]
@@ -47,7 +47,7 @@ namespace TheBlogFinalMVC.Models
     
         //Navigation Property
         public virtual Blog Blog { get; set; }
-        public virtual BlogUser Author { get; set; }
+        public virtual BlogUser BlogUser { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
         //use HashSet because we're working with DB data - tags held in DB table

@@ -10,7 +10,7 @@ namespace TheBlogFinalMVC.Models
     public class Blog
     {
         public int Id { get; set; } //primary key - publicly accessible
-        public string AuthorId { get; set; } //foreign key - will be primary key for ASP.Net UserModel
+        public string BlogUserId { get; set; } //foreign key - will be primary key for ASP.Net UserModel
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters.", MinimumLength = 2)]
@@ -39,7 +39,7 @@ namespace TheBlogFinalMVC.Models
     
         //Navigation
 
-        public virtual BlogUser Author { get; set; }
+        public virtual BlogUser BlogUser { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; } = new HashSet<Post>();
         //declares publicly accessible property called Posts that is of interface type ICollection, then implemented with concrete class HashSet
