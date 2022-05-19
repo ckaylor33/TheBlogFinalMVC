@@ -12,6 +12,7 @@ namespace TheBlogFinalMVC.Models
     {
         public int Id { get; set; } //primary key
 
+        [Display(Name ="Blog Name")]
         public int BlogId { get; set; } //foreign key
 
         public string BlogUserId { get; set; } //whoever wrote the post - string by default under IdentityUser
@@ -35,6 +36,7 @@ namespace TheBlogFinalMVC.Models
         [Display(Name = "Updated Date")]
         public DateTime? Updated { get; set; }
 
+        [Display(Name ="Ready Status")]
         public ReadyStatus ReadyStatus { get; set; } //is ready to be viewed by public or not? bool not robust enough so created enum
 
         public string Slug { get; set; } //derived from the title the user enters
