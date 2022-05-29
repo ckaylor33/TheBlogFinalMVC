@@ -209,6 +209,11 @@ namespace TheBlogFinalMVC.Data.Migrations
                     b.Property<string>("ContentType")
                         .HasColumnType("text");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");

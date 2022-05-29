@@ -2,20 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TheBlogFinalMVC.Data;
+using TheBlogFinalMVC.Services;
 
 namespace TheBlogFinalMVC.Models
 {
     public class BlogsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IImageService _imageService;
+        private readonly UserManager<BlogUser> _userManager;
 
-        public BlogsController(ApplicationDbContext context)
+        public BlogsController(ApplicationDbContext context, IImageService imageService, UserManager<BlogUser> userManager)
         {
             _context = context;
+            _imageService = imageService;
+            _userManager = userManager;
         }
 
         // GET: Blogs
@@ -45,6 +52,7 @@ namespace TheBlogFinalMVC.Models
         }
 
         // GET: Blogs/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -59,6 +67,10 @@ namespace TheBlogFinalMVC.Models
         {
             if (ModelState.IsValid)
             {
+                blog.Created = DateTime.Now;
+                blog.BlogUserId = _userManager.GetUserId(User);
+                blog.ImageData = await _imageService.EncodeImageAsync(blog.Image);
+                blog.ContentType = _imageService.ContentType(blog.Image);
                 _context.Add(blog);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

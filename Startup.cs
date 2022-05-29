@@ -13,6 +13,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using TheBlogFinalMVC.Data;
 using TheBlogFinalMVC.Models;
+using TheBlogFinalMVC.Services;
+using TheBlogFinalMVC.ViewModels;
 
 namespace TheBlogFinalMVC
 {
@@ -48,6 +50,22 @@ namespace TheBlogFinalMVC
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
             services.AddRazorPages();
+
+            //Register custom DataService class 
+            services.AddScoped<DataService>();
+
+            //Register a preconfiguredd service of MailSettings class
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddScoped<IBlogEmailSender, EmailService>();
+
+            //Register image service
+            services.AddScoped<IImageService, BasicImageService>();
+
+            //Register the slug service
+            services.AddScoped<ISlugService, BasicSlugService>();
+
+            //Allow Legacy timestamp
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
         }
 

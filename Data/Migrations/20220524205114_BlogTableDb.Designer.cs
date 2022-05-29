@@ -12,8 +12,8 @@ using TheBlogFinalMVC.Data;
 namespace TheBlogFinalMVC.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220428191830_001")]
-    partial class _001
+    [Migration("20220524205114_BlogTableDb")]
+    partial class BlogTableDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -210,6 +210,11 @@ namespace TheBlogFinalMVC.Data.Migrations
 
                     b.Property<string>("ContentType")
                         .HasColumnType("text");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
