@@ -1,7 +1,8 @@
 ﻿@using TheBlogFinalMVC.Services
+@using TheBlogFinalMVC.Models
 
 @inject IImageService imageService
-@model IEnumerable<TheBlogFinalMVC.Models.Blog>
+@model IEnumerable<Blog>
 
 @{
     ViewData["Title"] = "Index";
@@ -49,7 +50,7 @@
                 @Html.DisplayFor(modelItem => blog.Updated)
             </td>
             <td>
-                <img src="@imageService.DecodeImage(blog.ImageData, blog.ContentType)" />
+                <img class="img-fluid" width="200px;" src="@imageService.DecodeImage(blog.ImageData, blog.ContentType)" />
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@blog.Id">Edit</a> |

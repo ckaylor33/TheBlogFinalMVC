@@ -23,6 +23,9 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="~/css/site.css" rel="stylesheet" />
 
+        <!--Custom CSS-->
+        <link href=~/css/Custom.css rel="stylesheet"/>
+
     </head>
 
     <body>
@@ -40,6 +43,7 @@
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="About">About</a></li>
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     </ul>
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>

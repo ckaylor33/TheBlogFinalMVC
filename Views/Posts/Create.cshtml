@@ -4,37 +4,76 @@
 @{
     ViewData["Title"] = "Create";
 }
+<div class="row justify-content-center">
+    <div class="col-md-8">
+       <h1>Create</h1>
 
-<h1>Create</h1>
+       <h4>Post</h4>
+    </div>
+ 
+</div>
 
-<h4>Post</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row justify-content-center">
+    <div class="col-md-8 ">
         <form enctype="multipart/form-data" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
+            <div class="form-group pb-2">
                 <label asp-for="BlogId" class="control-label"></label>
                 <select asp-for="BlogId" class ="form-control" asp-items="ViewBag.BlogId"></select>
             </div>
 
-            <div class="form-group">
+            <div class="form-group pb-2">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group pb-2">
                 <label asp-for="Abstract" class="control-label"></label>
                 <textarea asp-for="Abstract" class="form-control" ></textarea>
                 <span asp-validation-for="Abstract" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group pb-2">
                 <label asp-for="Content" class="control-label"></label>
                 <textarea asp-for="Content" class="form-control" ></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <div class="form-group pb-2">
+                <label asp-for="Image" class="control-label"></label>
+                <input type="file" asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+
+            <div class="form-group pb-2">
+                <div class="row">
+                    <div class="col">
+                        <label class="control-label">Manage Tags</label>
+                    </div>
+                </div>
+                <div class="row pb-2">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" class="form-control" id="TagEntry" />
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col d-grid">
+                                <button id="TagEntry" onclick="AddTag()" class="btn btn-dark btn-small" name="Add" type="button">Add</button>
+                            </div>
+                            <div class="col d-grid">
+                                <button onclick="DeleteTag()" name="Delete" class="btn btn-small btn-dark" type="button">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col d-grid">
+                        <select class="btn border align-self-start" name="TagValues" style="vertical-align: top; text-align: start; padding:0;" id="TagList" multiple></select>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
@@ -43,14 +82,8 @@
                 <span asp-validation-for="ReadyStatus" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input type="file" asp-for="Image" class="form-control" />
-                <span asp-validation-for="ImageData" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group py-2 d-grid">
+                <button type="submit" class="btn btn-dark btn-small" >Create</button>
             </div>
         </form>
     </div>
@@ -60,6 +93,17 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@section Scripts{
+
+    <script src="~/js/Custom.js"></script>
+
+    <script>
+        //Default font size but not for placeholder...
+        $('#Content').summernote({
+            placeholder: "Post Body"
+        });
+    </script>
+
+
+
 }
