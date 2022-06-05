@@ -3,6 +3,21 @@
     border-radius:10px;
 }
 
+button.btn-outline-dark {
+    color: white;
+    width: 80%;
+}
+
 select > option {
     font-weight:bolder;
+}
+
+div.swal2-actions {
+    width: 100%;
+    display: block;
+}
+
+div.swal2-container.swal2-center.swal2-backdrop-show > div {
+    outline: 4px solid black;
+/*    border: 2px solid red;*/
 }

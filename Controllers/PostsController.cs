@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using TheBlogFinalMVC.Data;
 using TheBlogFinalMVC.Models;
 using TheBlogFinalMVC.Services;
+using TheBlogFinalMVC.Enums;
+using X.PagedList;
 
 namespace TheBlogFinalMVC.Controllers
 {
@@ -28,11 +30,57 @@ namespace TheBlogFinalMVC.Controllers
             _userManager = userManager;
         }
 
+        public async Task<IActionResult> SearchIndex(int? page, string searchTerm)
+        {
+            ViewData["SearchTerm"] = searchTerm;
+
+            var pageNumber = page ?? 1;
+            var pageSize = 6;
+
+            var posts = _context.Posts.Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).AsQueryable();
+            if (searchTerm is not null)
+            {
+                searchTerm = searchTerm.ToLower();
+
+                posts = posts.Where(
+                    p => p.Title.ToLower().Contains(searchTerm) ||
+                    p.Abstract.ToLower().Contains(searchTerm) ||
+                    p.Content.ToLower().Contains(searchTerm) ||
+                    p.Comments.Any(c => c.Body.ToLower().Contains(searchTerm) ||
+                                   c.ModeratedBody.ToLower().Contains(searchTerm) ||
+                                   c.BlogUser.FirstName.ToLower().Contains(searchTerm) ||
+                                   c.BlogUser.LastName.ToLower().Contains(searchTerm) ||
+                                   c.BlogUser.Email.ToLower().Contains(searchTerm)));
+            }
+            posts = posts.OrderByDescending(p => p.Created);
+            return View(await posts.ToPagedListAsync(pageNumber, pageSize));
+        }
+
         // GET: Posts
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Posts.Include(p => p.Blog).Include(p => p.BlogUser);
             return View(await applicationDbContext.ToListAsync());
+        }
+
+        //BlogPostIndex
+        public async Task<IActionResult> BlogPostIndex(int? id, int? page)
+        {
+            if (id is null)
+            {
+                return NotFound();
+            }
+
+            var pageNumber = page ?? 1;
+            var pageSize = 6;
+
+            /*var posts = _context.Posts.Where(p => p.BlogId == id).ToList();*/
+            var posts = await _context.Posts
+                .Where(p => p.BlogId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
+                .OrderByDescending(p => p.Created)
+                .ToPagedListAsync(pageNumber, pageSize);
+
+            return View(posts);
         }
 
         // GET: Posts/Details/5
@@ -84,9 +132,27 @@ namespace TheBlogFinalMVC.Controllers
 
                 //Create the slug and determine if it's unique
                 var slug = _slugService.UrlFriendly(post.Title);
+
+                //Create a variable to store whether an error has occurred
+                var validationError = false;
+
+                //Detect empty title/slug
+                if (string.IsNullOrEmpty(slug))
+                {
+                    validationError = true;
+                    ModelState.AddModelError("", "The Title you provided cannot be used as it results in an empty slug.");
+                }
+
+                //Detect incoming duplicate slugs
                 if (!_slugService.IsUnique(slug))
                 {
+                    validationError = true;
                     ModelState.AddModelError("Title", "The Title you provided cannot be used as it results in a duplicate slug.");
+                }
+
+                //returns View back to user along with errors found
+                if (validationError)
+                {
                     ViewData["TagValues"] = string.Join(",", tagValues);
                     return View(post);
                 }
@@ -97,7 +163,7 @@ namespace TheBlogFinalMVC.Controllers
                 await _context.SaveChangesAsync();
 
                 //How do I loop over the incoming list of string?
-                foreach(var tagText in tagValues)
+                foreach (var tagText in tagValues)
                 {
                     _context.Add(new Tag()
                     {
@@ -123,12 +189,13 @@ namespace TheBlogFinalMVC.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == id);
             if (post == null)
             {
                 return NotFound();
             }
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name", post.BlogId);
+            ViewData["TagValues"] = string.Join(",", post.Tags.Select(t => t.Text));
             return View(post);
         }
 
@@ -137,7 +204,7 @@ namespace TheBlogFinalMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile NewImage)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile NewImage, List<string> tagValues)
         {
             if (id != post.Id)
             {
@@ -148,18 +215,50 @@ namespace TheBlogFinalMVC.Controllers
             {
                 try
                 {
-                    var newPost = await _context.Posts.FindAsync(post.Id);
+                    //The original post - gets a copy before any edits applied (preserves data that doesn't change)
+                    //Opportunity to update data that has changed
+                    var originalPost = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == post.Id);
 
-                    newPost.Updated = DateTime.Now;
-                    newPost.Title = post.Title;
-                    newPost.Abstract = post.Abstract;
-                    newPost.Content = post.Content;
-                    newPost.ReadyStatus = post.ReadyStatus;
+                    originalPost.Updated = DateTime.Now;
+                    originalPost.Title = post.Title;
+                    originalPost.Abstract = post.Abstract;
+                    originalPost.Content = post.Content;
+                    originalPost.ReadyStatus = post.ReadyStatus;
 
-                    if(NewImage is not null)
+                    var newSlug = _slugService.UrlFriendly(post.Title);
+                    if (newSlug != originalPost.Slug)
                     {
-                        newPost.ImageData = await _imageService.EncodeImageAsync(NewImage);
-                        newPost.ContentType = _imageService.ContentType(NewImage);
+                        if (_slugService.IsUnique(newSlug))
+                        {
+                            originalPost.Title = post.Title;
+                            originalPost.Slug = newSlug;
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Title", "This Title cannot be used as it results in a duplicate slug.");
+                            ViewData["TagValues"] = string.Join(",", post.Tags.Select(t => t.Text));
+                            return View(post);
+                        }
+                    }
+
+                    if (NewImage is not null)
+                    {
+                        originalPost.ImageData = await _imageService.EncodeImageAsync(NewImage);
+                        originalPost.ContentType = _imageService.ContentType(NewImage);
+                    }
+
+                    //Remove all Tags previously associated with this Post
+                    _context.Tags.RemoveRange(originalPost.Tags);
+
+                    //Add new tags from the Edit form
+                    foreach (var tagText in tagValues)
+                    {
+                        _context.Tags.Add(new Tag()
+                        {
+                            PostId = post.Id,
+                            BlogUserId = originalPost.BlogUserId,
+                            Text = tagText
+                        });
                     }
 
                     await _context.SaveChangesAsync();

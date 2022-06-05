@@ -41,16 +41,44 @@
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="ReadyStatus" class="control-label"></label>
-                <select asp-for="ReadyStatus" class="form-control" asp-items="@Html.GetEnumSelectList<ReadyStatus>()"></select>
-                <span asp-validation-for="ReadyStatus" class="text-danger"></span>
+            <div class="form-group pb-2">
+                <div class="row">
+                    <div class="col">
+                        <label class="control-label">Manage Tags</label>
+                    </div>
+                </div>
+                <div class="row pb-2">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" class="form-control" id="TagEntry" />
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col d-grid">
+                                <button id="TagEntry" onclick="AddTag()" class="btn btn-dark btn-small" name="Add" type="button">Add</button>
+                            </div>
+                            <div class="col d-grid">
+                                <button onclick="DeleteTag()" name="Delete" class="btn btn-small btn-dark" type="button">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col d-grid">
+                        <select class="btn border align-self-start" name="TagValues" style="vertical-align: top; text-align: start; padding:0;" id="TagList" multiple></select>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>
                 <input type="file" name="NewImage" class="form-control" />
                 <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ReadyStatus" class="control-label"></label>
+                <select asp-for="ReadyStatus" class="form-control" asp-items="@Html.GetEnumSelectList<ReadyStatus>()"></select>
+                <span asp-validation-for="ReadyStatus" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -67,12 +95,15 @@
 @section Scripts{
 
     <script>
+
+        let tagValues = '@ViewData["TagValues"]';
+
         //Default font size but not for placeholder...
         $('#Content').summernote({
             placeholder: "Post Body"
         });
     </script>
 
-
+    <script src="~/js/Custom.js"></script>
 
 }
