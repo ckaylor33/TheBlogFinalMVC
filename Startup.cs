@@ -54,6 +54,9 @@ namespace TheBlogFinalMVC
             //Register custom DataService class 
             services.AddScoped<DataService>();
 
+            //Register custom blog search service
+            services.AddScoped<BlogSearchService>();
+
             //Register a preconfiguredd service of MailSettings class
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddScoped<IBlogEmailSender, EmailService>();

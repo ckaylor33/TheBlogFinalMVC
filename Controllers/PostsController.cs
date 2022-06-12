@@ -12,6 +12,8 @@ using TheBlogFinalMVC.Models;
 using TheBlogFinalMVC.Services;
 using TheBlogFinalMVC.Enums;
 using X.PagedList;
+using Microsoft.AspNetCore.Authorization;
+using TheBlogFinalMVC.ViewModels;
 
 namespace TheBlogFinalMVC.Controllers
 {
@@ -21,13 +23,16 @@ namespace TheBlogFinalMVC.Controllers
         private readonly ISlugService _slugService;
         private readonly IImageService _imageService;
         private readonly UserManager<BlogUser> _userManager;
+        private readonly BlogSearchService _blogSearchService;
 
-        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService, UserManager<BlogUser> userManager)
+
+        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService, UserManager<BlogUser> userManager, BlogSearchService blogSearchService)
         {
             _context = context;
             _slugService = slugService;
             _imageService = imageService;
             _userManager = userManager;
+            _blogSearchService = blogSearchService;
         }
 
         public async Task<IActionResult> SearchIndex(int? page, string searchTerm)
@@ -37,22 +42,8 @@ namespace TheBlogFinalMVC.Controllers
             var pageNumber = page ?? 1;
             var pageSize = 6;
 
-            var posts = _context.Posts.Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).AsQueryable();
-            if (searchTerm is not null)
-            {
-                searchTerm = searchTerm.ToLower();
+            var posts = _blogSearchService.Search(searchTerm);
 
-                posts = posts.Where(
-                    p => p.Title.ToLower().Contains(searchTerm) ||
-                    p.Abstract.ToLower().Contains(searchTerm) ||
-                    p.Content.ToLower().Contains(searchTerm) ||
-                    p.Comments.Any(c => c.Body.ToLower().Contains(searchTerm) ||
-                                   c.ModeratedBody.ToLower().Contains(searchTerm) ||
-                                   c.BlogUser.FirstName.ToLower().Contains(searchTerm) ||
-                                   c.BlogUser.LastName.ToLower().Contains(searchTerm) ||
-                                   c.BlogUser.Email.ToLower().Contains(searchTerm)));
-            }
-            posts = posts.OrderByDescending(p => p.Created);
             return View(await posts.ToPagedListAsync(pageNumber, pageSize));
         }
 
@@ -60,6 +51,9 @@ namespace TheBlogFinalMVC.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Posts.Include(p => p.Blog).Include(p => p.BlogUser);
+
+            ViewData["HeadingImage"] = "/images/home-bg.jpg";
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -74,36 +68,79 @@ namespace TheBlogFinalMVC.Controllers
             var pageNumber = page ?? 1;
             var pageSize = 6;
 
-            /*var posts = _context.Posts.Where(p => p.BlogId == id).ToList();*/
+            var blogs = await _context.Blogs.Include(p => p.Posts).FirstOrDefaultAsync(p => p.Id == id);
             var posts = await _context.Posts
                 .Where(p => p.BlogId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
                 .OrderByDescending(p => p.Created)
                 .ToPagedListAsync(pageNumber, pageSize);
 
+            var imageURL = Url.Content("~/images/home-bg.jpg");
+            ViewData["HeaderImage"] = imageURL;
+            ViewData["MainText"] = blogs.Name;
+            ViewData["SubText"] = blogs.Description;
+
             return View(posts);
         }
 
         // GET: Posts/Details/5
+
         public async Task<IActionResult> Details(string slug)
         {
-            if (string.IsNullOrEmpty(slug))
-            {
-                return NotFound();
-            }
+            ViewData["Title"] = "Post Details Page";
+            if (string.IsNullOrEmpty(slug)) return NotFound();
 
             var post = await _context.Posts
-                .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
                 .Include(p => p.Tags)
+                .Include(p => p.Comments)
+                .ThenInclude(c => c.BlogUser)
+                .Include(p => p.Comments)
+                .ThenInclude(c => c.Moderator)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
-            if (post == null)
-            {
-                return NotFound();
-            }
 
-            return View(post);
+            if (post == null) return NotFound();
+
+            var dataVM = new PostDetailViewModel()
+            {
+                Post = post,
+                Tags = _context.Tags.Select(t => t.Text.ToLower()).Distinct().ToList()
+
+            };
+
+            ViewData["HeaderImage"] = _imageService.DecodeImage(post.ImageData, post.ContentType);
+            ViewData["MainText"] = post.Title;
+            ViewData["SubText"] = post.Abstract;
+
+            return View(dataVM);
         }
 
+
+
+
+
+        /*        public async Task<IActionResult> Details(string slug)
+                {
+                    if (string.IsNullOrEmpty(slug))
+                    {
+                        return NotFound();
+                    }
+
+                    var post = await _context.Posts
+                        .Include(p => p.Blog)
+                        .Include(p => p.BlogUser) //Author of post
+                        .Include(p => p.Tags)
+                        .Include(p => p.Comments)
+                        .ThenInclude(c => c.BlogUser) //Author of comment
+                        .FirstOrDefaultAsync(m => m.Slug == slug);
+                    if (post == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return View(post);
+                }*/
+
+        [Authorize(Roles = "Administrator")]
         // GET: Posts/Create
         public IActionResult Create()
         {
@@ -182,6 +219,7 @@ namespace TheBlogFinalMVC.Controllers
         }
 
         // GET: Posts/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -282,6 +320,7 @@ namespace TheBlogFinalMVC.Controllers
         }
 
         // GET: Posts/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

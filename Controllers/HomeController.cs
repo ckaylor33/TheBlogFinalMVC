@@ -20,8 +20,8 @@ namespace TheBlogFinalMVC.Controllers
         private readonly IBlogEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, 
-                              IBlogEmailSender emailSender, 
+        public HomeController(ILogger<HomeController> logger,
+                              IBlogEmailSender emailSender,
                               ApplicationDbContext context)
         {
             _logger = logger;
@@ -39,21 +39,30 @@ namespace TheBlogFinalMVC.Controllers
                 .OrderByDescending(p => p.Created)
                 .ToPagedListAsync(pageNumber, pageSize);
 
-/*            var blogs = _context.Blogs.Where(
-    b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
-    .OrderByDescending(p => p.Created)
-    .ToPagedListAsync(pageNumber, pageSize);*/
+            /*            var blogs = _context.Blogs.Where(
+                b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
+                .OrderByDescending(p => p.Created)
+                .ToPagedListAsync(pageNumber, pageSize);*/
+
+            var imageURL = Url.Content("~/images/home-bg.jpg");
+            ViewData["HeaderImage"] = imageURL;
+            ViewData["MainText"] = "Charlie Blogs";
+            ViewData["SubText"] = "Follow my Coding Journey";
 
             return View(await blogs);
         }
 
         public IActionResult About()
         {
+            ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
+            ViewData["MainText"] = "About Me";
             return View();
         }
 
         public IActionResult Contact()
         {
+            ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
+            ViewData["MainText"] = "Contact Me";
             return View();
         }
 

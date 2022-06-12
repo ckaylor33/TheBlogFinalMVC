@@ -37,7 +37,7 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
             SignInManager<BlogUser> signInManager,
             ILogger<RegisterModel> logger,
             IBlogEmailSender emailSender,
-            IImageService imageService, 
+            IImageService imageService,
             IConfiguration configuration)
         {
             _userManager = userManager;
@@ -57,7 +57,7 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Display(Name ="Custom Image")]
+            [Display(Name = "Custom Image")]
             public IFormFile ImageFile { get; set; }
 
             [Required]
@@ -94,8 +94,13 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
+            ViewData["MainText"] = "Register";
+
             ReturnUrl = returnUrl;
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -113,7 +118,7 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     ImageData = (await _imageService.EncodeImageAsync(Input.ImageFile)) ??
                                  await _imageService.EncodeImageAsync(_configuration["DefaultUserImage"]),
-                    ContentType = Input.ImageFile is null ? 
+                    ContentType = Input.ImageFile is null ?
                                   Path.GetExtension(_configuration["DefaultUserImage"]) :
                                   _imageService.ContentType(Input.ImageFile),
                 };
@@ -121,6 +126,8 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
+                    ViewData["MainText"] = "Check Email";
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -146,6 +153,8 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
                 }
                 foreach (var error in result.Errors)
                 {
+                    ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
+                    ViewData["MainText"] = "Check Errors";
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }

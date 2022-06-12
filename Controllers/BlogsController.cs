@@ -30,6 +30,7 @@ namespace TheBlogFinalMVC.Models
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Blogs.Include(b => b.BlogUser);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -53,7 +54,7 @@ namespace TheBlogFinalMVC.Models
         }
 
         // GET: Blogs/Create
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             return View();
@@ -81,6 +82,7 @@ namespace TheBlogFinalMVC.Models
         }
 
         // GET: Blogs/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,7 +95,7 @@ namespace TheBlogFinalMVC.Models
             {
                 return NotFound();
             }
-            
+
             return View(blog);
         }
 
@@ -116,17 +118,17 @@ namespace TheBlogFinalMVC.Models
                     var newBlog = await _context.Blogs.FindAsync(blog.Id);
                     newBlog.Updated = DateTime.Now;
 
-                    if(newBlog.Name != blog.Name)
+                    if (newBlog.Name != blog.Name)
                     {
                         newBlog.Name = blog.Name;
                     }
 
-                    if(newBlog.Description != blog.Description)
+                    if (newBlog.Description != blog.Description)
                     {
                         newBlog.Description = blog.Description;
                     }
-                   
-                    if(NewImage is not null)
+
+                    if (NewImage is not null)
                     {
                         newBlog.ImageData = await _imageService.EncodeImageAsync(NewImage);
                     }
@@ -151,6 +153,7 @@ namespace TheBlogFinalMVC.Models
         }
 
         // GET: Blogs/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

@@ -38,9 +38,9 @@ namespace TheBlogFinalMVC.Models
         //Navigation Properties
         public virtual Post Post { get; set; } //holds record represented by PostId
         
-        public virtual BlogUser BlogUser { get; set; } //holds record represented by AuthorId
+        public virtual BlogUser BlogUser { get; set; } //holds record represented by BlogUserId
 
-        public virtual BlogUser Moderator { get; set; } //use moderatorId string to go from the comment to IdentityUser record represnted by the single string
+        public virtual BlogUser Moderator { get; set; } //use moderatorId string to go from the comment to IdentityUser record represented by the single string
 
     }
 }

@@ -57,6 +57,9 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
                     protocol: Request.Scheme);
             }
 
+            ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
+            ViewData["MainText"] = "Confirm Email";
+
             return Page();
         }
     }

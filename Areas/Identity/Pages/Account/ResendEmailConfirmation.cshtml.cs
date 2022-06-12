@@ -38,6 +38,8 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
 
         public void OnGet()
         {
+            ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
+            ViewData["MainText"] = "Resend Email";
         }
 
         public async Task<IActionResult> OnPostAsync()

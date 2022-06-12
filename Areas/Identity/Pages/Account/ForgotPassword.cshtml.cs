@@ -37,10 +37,17 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
             public string Email { get; set; }
         }
 
+        public async Task OnGetAsync()
+        {
+            ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
+            ViewData["MainText"] = "Forgot Password?";
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {
+
                 var user = await _userManager.FindByEmailAsync(Input.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
@@ -62,6 +69,9 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
                     Input.Email,
                     "Reset Password",
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
+                ViewData["MainText"] = "Forgot Password Reset";
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

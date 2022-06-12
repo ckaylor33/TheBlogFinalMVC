@@ -1,73 +1,74 @@
-﻿@using TheBlogFinalMVC.Services
-@using TheBlogFinalMVC.Models
+﻿@using TheBlogFinalMVC.Models
+@using TheBlogFinalMVC.Services
+@using TheBlogFinalMVC.Enums
+@using Microsoft.AspNetCore.Identity;
 @using X.PagedList
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
 
+
+
+@inject UserManager<BlogUser> userManager
 @inject IImageService imageService
+
 @model IPagedList<Post>
 
-@{
-    ViewData["Title"] = "Index";
-}
+<div class="row d-flex p-2">
+    @foreach (var post in Model)
+    {
+        //Is the logged in user the Author of this post??
+        var isAuthor = false;
+        if (User.Identity.IsAuthenticated)
+        {
+            isAuthor = User.IsInRole(BlogRole.Administrator.ToString());
+            isAuthor = isAuthor && (post.BlogUserId == userManager.GetUserId(User));
+        }
 
-<h1>@ViewData["Title"]</h1>
+        <div class="col-sm-12 col-lg-4 col-md-6 pb-2">
+            <div class="card border-dark">
+                <div class="card-body text-center">
+                    <div class="bg-warning">
+                        <hr class="card-hr" />
+                        <h5 class="card-title">@post.Title</h5>
+                        <hr class="card-hr" />
+                    </div>
+                    <div>
+                        <p class="card-text">@post.Abstract</p>
+                    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Image
-            </th>
-            <th>
-                Title
-            </th>
-            <th>
-                Abstract
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <img class="img-fluid" width="200px;" src="@imageService.DecodeImage(item.ImageData, item.ContentType)"/>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Abstract)
-            </td>
-            
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-slug="@item.Slug">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                    <br />
+                    <div class="text-center d-grid">
+                        <a class="btn btn-dark btn-small mb-2" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">Read More</a>
+                    </div>
 
-<hr/>
+                    @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+                    {
+                        <div class="text-center d-grid">
+                            <a class="btn btn-success btn-small border-dark" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">Edit Post</a>
+                        </div>
+                    }
+                </div>
+                <img class="card-img card-img-bottom" style="object-fit: cover;" src="@imageService.DecodeImage(post.ImageData,  post.ContentType)" />
+            </div>
 
-<div class="row">
+        </div>
+    }
+</div>
+
+<hr />
+
+<div class="row d-flex p-2">
     <div class="col h3">
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
     </div>
 </div>
-
-<div class="row">
+<div class="row d-flex p-2">
     <div class="col">
-        @Html.PagedListPager(Model, page => Url.Action("BlogPostIndex", new {id = Model.FirstOrDefault().BlogId, page = page}),
-        new PagedListRenderOptions 
-        {
-            LiElementClasses = new string[] {"page-item"},
-            PageClasses = new string[] {"page-link"}
-        })
+        @Html.PagedListPager(Model, page => Url.Action("BlogPostIndex", new { id = Model.FirstOrDefault().BlogId, page = page }),
+            new PagedListRenderOptions
+            {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            })
     </div>
 </div>
