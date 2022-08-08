@@ -8,7 +8,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="container">@ViewData["Title"]</h1>
 
 <p>
     @if(User.IsInRole("Administrator"))
@@ -16,7 +16,7 @@
             <a asp-action="Create">Create New</a>
     }
 </p>
-<table class="table">
+<table class="table container">
     <thead>
         <tr>
             <th>

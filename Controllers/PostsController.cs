@@ -38,6 +38,8 @@ namespace TheBlogFinalMVC.Controllers
         public async Task<IActionResult> SearchIndex(int? page, string searchTerm)
         {
             ViewData["SearchTerm"] = searchTerm;
+            ViewData["HeaderImage"] = "/images/home-bg.jpg";
+            ViewData["MainText"] = searchTerm;
 
             var pageNumber = page ?? 1;
             var pageSize = 6;
@@ -52,7 +54,8 @@ namespace TheBlogFinalMVC.Controllers
         {
             var applicationDbContext = _context.Posts.Include(p => p.Blog).Include(p => p.BlogUser);
 
-            ViewData["HeadingImage"] = "/images/home-bg.jpg";
+            ViewData["HeaderImage"] = "/images/home-bg.jpg";
+            ViewData["MainText"] = "Posts Index Page";
 
             return View(await applicationDbContext.ToListAsync());
         }

@@ -14,57 +14,37 @@
 <div class="row d-flex justify-content-center p-2">
     @foreach (var blog in Model)
     {
-        <div class="col-sm-12 col-md-6 col-lg-4 mt-2">
-            <div class="card border-dark">
-                <img class="card-img-top" style="object-fit: cover;" src="@_imageService.DecodeImage(blog.ImageData, blog.ContentType)" />
-                <div class="card-body text-center">
-
-                    <div class="bg-warning">
-                        <hr class="card-hr" />
-                        <h5 class="card-title">@blog.Name</h5>
-                        <hr class="card-hr" />
+        <div class="col-sm-12 col-md-6 col-lg-4 mt-2 mb-2">
+            <div class="card card-raised h-100">
+                <a class="ripple-gray" href="#!"><img class="card-img-top img-fluid" src="@_imageService.DecodeImage(blog.ImageData, blog.ContentType)" style="width: 100%; height: 350px; object-fit: cover;"></a>
+                <div class="card-body">
+                    <h2 class="card-title">@blog.Name</h2>
+                    <h3 class="card-subtitle mb-3">@blog.Created.Date.ToString("dd, MMM yyyy")</h3>
+                    <p class="card-text cftooltip"
+                   id="tooltip"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="@blog.Description"
+                   data-original-title="@blog.Description">@blog.Description</p>
+                </div>
+                <div class="card-actions">
+                    <div class="card-action-buttons">
+                        <a class="btn btn-raised-warning  p-1" style="background: #ff993b;" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id">Read Posts</a>
                     </div>
-                    <div>
-                        <p class="card-text cftooltip"
-                        id="tooltip"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="@blog.Description" 
-                        data-original-title="@blog.Description">@blog.Description</p>
-                    </div>
-
-                    <br/>
-
-                    <div class="text-center d-grid">
-                        <a class="btn btn-dark btn-small mb-2" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id">
-                            Read Posts
-                        </a>
-                    </div>
-
                     @if (User.IsInRole(BlogRole.Administrator.ToString()))
                     {
-                        <div class="text-center d-grid">
-                            <a class="btn btn-dark btn-small mb-2" asp-action="Create" asp-controller="Posts" asp-route-id="@blog.Id">Create Post</a>
+                        <div class="card-action-buttons">
+                            <a class="btn btn-raised-warning  p-1" style="background: #ff993b;" asp-action="Create" asp-controller="Posts" asp-route-id="@blog.Id">Create Post</a>
                         </div>
-                    }
-
-                    @if (User.IsInRole(BlogRole.Administrator.ToString()))
-                    {
-                        <div class="text-center d-grid">
-                            <a class="btn btn-danger btn-small mb-2" asp-action="Edit" asp-controller="Blogs" asp-route-id="@blog.Id">Edit Blog</a>
+                        <div class="card-action-buttons">
+                            <a class="btn btn-raised-warning  p-1" style="background: #ff993b;" asp-action="Edit" asp-controller="Blogs" asp-route-id="@blog.Id">Edit Post</a>
                         </div>
                     }
                 </div>
-
             </div>
         </div>
-
     }
-
-
 </div>
-
-
 
 
 <!--Add paged controls here-->
@@ -78,10 +58,10 @@
 <div class="row d-flex justify-content-center p-2">
     <div class="col">
         @Html.PagedListPager(Model, page => Url.Action("Index", new {page = page}),
-        new PagedListRenderOptions 
+        new PagedListRenderOptions
         {
-            LiElementClasses = new string[] {"page-item"},
-            PageClasses = new string[] {"page-link"}
+        LiElementClasses = new string[] {"page-item"},
+        PageClasses = new string[] {"page-link"}
         })
     </div>
 </div>
@@ -89,15 +69,15 @@
 @section Scripts {
     <script>
         var swalMsg = '@TempData["SweetAlert"]'
-        if(swalMsg != ""){
+        if (swalMsg != "") {
             Swal.fire({
                 icon: 'success',
-                title:swalMsg,
+                title: swalMsg,
                 timer: 2500
             })
         }
 
-        $(document).ready(function (){
+        $(document).ready(function() {
             $("p").tooltip();
         })
 

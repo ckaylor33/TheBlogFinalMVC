@@ -10,9 +10,9 @@ button.btn-outline-dark {
     width: 80%;
 }*/
 
-select > option {
+/*select > option {
     font-weight: 600;
-}
+}*/
 
 /*div.swal2-actions {
     width: 100%;
@@ -24,12 +24,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 /*    border: 2px solid red;*/
 /*}*/
 
-/*NAVIGATION*/
-.nav {
-    display: inline-block;
-}
-
-#navbarResponsive > ul:nth-child(2) > li:nth-child(2) > form > button {
+/*#navbarResponsive > ul:nth-child(2) > li:nth-child(2) > form > button {
     line-height: 1.5;
     font-family: 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif, Arial, sans-serif;
     list-style: none;
@@ -48,47 +43,47 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
 .nav-identity {
     padding-top: 18px !important;
-}
+}*/
 
 /*CUSTOM MEDIA OBJECT BORDER*/
-.media-border {
+/*.media-border {
     border: 2px solid black;
-}
+}*/
 
-/*CUSTOM BG COLOR*/
+CUSTOM BG COLOR
 .bg-cf {
     background: rgba(255, 153, 59, .35);
 }
 
 /*APP WIDE FONT WEIGHT*/
-header.masthead .page-heading .subheading,
+/*header.masthead .page-heading .subheading,
 header-masthead .site-heading .subheading,
 select, input, textarea, option, label, .tooltip-inner {
     font-weight: 600;
-}
+}*/
 
 /*GENERAL PADDING*/
-header.masthead .page-heading,
+/*header.masthead .page-heading,
 header.masthead .post-heading,
 header.masthead .site-heading {
     padding: 100px 0 100px 0;
-}
+}*/
 
 /*GOOGLE MAP*/
-#map {
+/*#map {
     height: 400px;
-}
+}*/
 
 .noline {
     text-decoration: none;
 }
 
-/*SUMMERNOTE*/
+SUMMERNOTE
 .note-editable, note-placeholder {
     font-size: 22px;
 }
 
-/*BUTTON STYLES*/
+/*BUTTON STYLES
 .btn-tag {
     margin-top: 10px;
 }
@@ -101,13 +96,19 @@ button.btn-small, a.btn-small {
     line-height: .6;
     border-radius: 10px;
     font-size: medium;
+}*/
+
+/*.btn-dark {
+    color: #fff;
+    background-color: #212121;
 }
 
 .btn-dark:hover {
-    border: 4px solid #ff993b;
-}
+    background-color: #fff;
+    color: #ff993b;
+}*/
 
-.btn-warning {
+/*.btn-warning {
     color: #212121;
     background-color: #ff993b;
     border-color: #ff993b;
@@ -117,10 +118,15 @@ button.btn-small, a.btn-small {
         color: white;
         background-color: #212121;
         outline: 4px solid #ff993b;
+}*/
+
+.btn-outline-warning {
+    color: #ff993b;
+    border-color: #212121;
 }
 
 /*CARD STYLES*/
-.card-hr {
+/*.card-hr {
     color: #212121;
     background-color: #212121;
     height: 3px;
@@ -144,26 +150,26 @@ button.btn-small, a.btn-small {
     height: 200px;
     width: 100%;
     object-fit: cover;
-}
+}*/
 
-/*PAGE STYLES*/
+/*PAGE STYLES
 .page-item.active .page-link {
-    background-color: #212121;
+    background-color: #ff993b;
     border-color: black;
 }
 
 .page-link {
-    color: #212121;
-}
+    color: #ff993b;
+}*/
 
 /*SWEETALERT STYLES*/
-div.swal2-container.swal2-center.swal2-backdrop-show > div {
+/*div.swal2-container.swal2-center.swal2-backdrop-show > div {
     outline: 4px solid black;
     border: 2px solid #ff993b;
-}
+}*/
 
 /*TOOLTIP STYLES*/
-.cftooltip * {
+/*.cftooltip * {
     opacity: 1.0 !important;
 }
 
@@ -180,10 +186,10 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
 .tooltip-show {
     opacity: 1;
-}
+}*/
 
 /*TAGS*/
-#TagList {
+/*#TagList {
     width: 100%;
     font-weight: 600;
 }
@@ -191,10 +197,10 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 .tagView {
     max-height: 300px;
     overflow-y: scroll;
-}
+}*/
 
 /*WEBKIT SCROLLBAR STYLES*/
-::-webkit-scrollbar {
+/*::-webkit-scrollbar {
     width: 10px;
 }
 
@@ -206,15 +212,15 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 ::-webkit-scrollbar-thumb {
     background: #212121;
     border-radius: 10px;
-}
+}*/
 
 /*ICONS*/
-a:hover {
+/*a:hover {
     color: #ff993b;
-}
+}*/
 
 /*LABEL*/
-label {
+/*label {
     line-height: 1.5;
     font-family: 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif, Arial, sans-serif;
     list-style: none;
@@ -229,4 +235,4 @@ label {
     text-transform: uppercase;
     padding: 10px 0px;
     color: black;
-}
+}*/
