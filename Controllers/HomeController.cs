@@ -63,14 +63,12 @@ namespace TheBlogFinalMVC.Controllers
 
         public IActionResult About()
         {
-            ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
             ViewData["MainText"] = "About Me";
             return View();
         }
 
         public IActionResult Contact()
         {
-            ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
             ViewData["MainText"] = "Contact Me";
             return View();
         }
@@ -82,7 +80,7 @@ namespace TheBlogFinalMVC.Controllers
             //This is where I will be emailing...
             model.Message = $"{model.Message} <hr/> Phone : {model.Phone}";
             await _emailSender.SendContactEmailAsync(model.Email, model.Name, model.Subject, model.Message);
-            return RedirectToAction("Index");
+            return RedirectToAction("Homepage");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

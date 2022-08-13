@@ -58,7 +58,6 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string returnUrl = null)
         {
             
-            ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
             ViewData["MainText"] = "Log In";
 
             if (!string.IsNullOrEmpty(ErrorMessage))

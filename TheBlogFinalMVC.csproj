@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Comments\**" />
+    <Content Remove="Views\Comments\**" />
+    <EmbeddedResource Remove="Views\Comments\**" />
+    <None Remove="Views\Comments\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Views\Shared\app-auth-login-styled-1.cshtml" />
   </ItemGroup>
 
