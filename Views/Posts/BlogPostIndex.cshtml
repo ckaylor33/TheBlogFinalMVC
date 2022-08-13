@@ -6,12 +6,27 @@
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
 
-
-
 @inject UserManager<BlogUser> userManager
 @inject IImageService imageService
 
 @model IPagedList<Post>
+
+@foreach (Post post in Model.Take(1))
+{
+    <div class="flex-row d-flex justify-content-between p-2">
+    <h3 class="hover-underline-animation text-muted">
+        <span class="material-icons" style="color: #ff993b">
+            newspaper
+        </span>
+        @post.Blog.Name.ToString()
+    </h3>
+</div>
+}
+
+
+
+<hr class="mx-2" />
+
 
 <div class="row d-flex p-2">
     @foreach (var post in Model)
@@ -23,32 +38,48 @@
             isAuthor = User.IsInRole(BlogRole.Administrator.ToString());
             isAuthor = isAuthor && (post.BlogUserId == userManager.GetUserId(User));
         }
+        
+        
 
-        <div class="col-sm-12 col-lg-4 col-md-6 pb-2">
-            <div class="card border-dark">
-                <div class="card-body text-center">
-                    <div class="bg-warning">
-                        <hr class="card-hr" />
-                        <h5 class="card-title">@post.Title</h5>
-                        <hr class="card-hr" />
-                    </div>
-                    <div>
-                        <p class="card-text">@post.Abstract</p>
-                    </div>
+        <div class="col-sm-12 col-lg-4 col-md-6 pb-2 my-3">
 
-                    <br />
-                    <div class="text-center d-grid">
-                        <a class="btn btn-dark btn-small mb-2" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">Read More</a>
+            <div class="card card-raised h-100">
+                <a class="ripple-gray" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
+                    <div class="img-hover-zoom--brightness">
+                        <img class="card-img-top img-fluid" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" style="width: 100%; height: 300px; object-fit: cover;">
                     </div>
+                </a>
+                <div class="card-body m-1 p-1">
+                    <a class="my-2 card-title text-muted text-decoration-none hover-underline-animation" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
+                        @post.Title
+                    </a>
+                    <p class="card-text">@post.Created.Date.ToString("dd-MM-yyyy")</p>
+                    <h4 class="card-text card-subtitle my-2 pb-2" id="tooltip"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="@post.Abstract"
+                    data-original-title="@post.Abstract">
+                        @post.Abstract
+                    </h4>
 
-                    @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
-                    {
-                        <div class="text-center d-grid">
-                            <a class="btn btn-success btn-small border-dark" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">Edit Post</a>
-                        </div>
-                    }
+
+
                 </div>
-                <img class="card-img card-img-bottom" style="object-fit: cover;" src="@imageService.DecodeImage(post.ImageData,  post.ContentType)" />
+                <div class="card-footer bg-white flex-row p-2 d-flex justify-content-between">
+                    <div class="card-actions">
+
+
+                        <a class="media" asp-action="About" asp-controller="Home">
+                            <img class="rounded-circle" src="@imageService.DecodeImage(post.BlogUser?.ImageData, post.BlogUser?.ContentType)" style="width:40px; height: 40px" />
+                        </a>
+                        <span class="card-body text-muted">by <a class="text-decoration-none text-muted hover-underline-animation" asp-action="About" asp-controller="Home">@post.BlogUser.FirstName</a></span>
+
+                        @if (isAuthor)
+                        {
+                            <a class="btn btn-text-warning" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">Edit Post</a>
+                        }
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -65,10 +96,10 @@
 <div class="row d-flex p-2">
     <div class="col">
         @Html.PagedListPager(Model, page => Url.Action("BlogPostIndex", new { id = Model.FirstOrDefault().BlogId, page = page }),
-            new PagedListRenderOptions
-            {
-                LiElementClasses = new string[] { "page-item" },
-                PageClasses = new string[] { "page-link" }
-            })
+        new PagedListRenderOptions
+        {
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" }
+        })
     </div>
 </div>

@@ -4,5 +4,8 @@
     ViewData["Title"] = "Confirm email";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="mb-3 text-muted hover-underline-animation">@ViewData["Title"] - Please Login</h1>
+
 <partial name="_StatusMessage" model="Model.StatusMessage" />
+
+<a asp-page="./Login" class="btn-raised-warning btn mt-3">Login</a>

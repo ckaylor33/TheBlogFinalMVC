@@ -4,22 +4,53 @@
     ViewData["Title"] = "Resend email confirmation";
 }
 
-<h1 class="container">@ViewData["Title"]</h1>
-<h2 class="container">Enter your email.</h2>
-<hr />
-<div class="row container ms-4">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.Email" class="form-label"></label>
-                <input asp-for="Input.Email" class="form-control" aria-required="true" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+<!-- Layout wrapper-->
+<div id="layoutAuthentication">
+    <!-- Layout content-->
+    <div id="layoutAuthentication_content">
+        <!-- Main page content-->
+        <main>
+            <!-- Main content container-->
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xxl-10 col-xl-10 col-lg-12">
+                        <div class="card card-raised shadow-10 mt-5 mt-xl-10 mb-4">
+                            <div class="row g-0">
+                                <div class="col-lg-5 col-md-6">
+                                    <div class="card-body p-5">
+                                        <!-- Auth header with logo image-->
+                                        <div class="text-center">
+                                            <img class="mb-3" src="\images\svg\Color logo - no background.svg" alt="..." style="height: 68px" />
+                                            <h1 class="display-5 mb-1">@ViewData["Title"]</h1>
+                                            <div class="subheading-1 mb-5">Enter your email.</div>
+                                        </div>
+                                        <!-- Login submission form-->
+                                        <form class="mb-5">
+                                            <div asp-validation-summary="All" class="text-danger"></div>
+                                            <div class="form-floating">
+                                                <input asp-for="Input.Email" class="form-control" aria-required="true" />
+                                                <label asp-for="Input.Email" class="form-label"></label>
+                                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                            </div>
+                                            <div class="text-center">
+                                                <button type="submit" class="w-100 btn btn-raised-warning mt-3 d-inline-block" style="border-radius: 10px;">Resend</button>
+                                            </div>
+                                        </form>
+                                        <div class="text-center mb-3"><a class="small fw-500 text-decoration-none link-dark hover-underline-animation" asp-page="./Login">Back to login!</a></div>
+                                        <div class="text-center mb-3"><a class="small fw-500 text-decoration-none link-dark hover-underline-animation" asp-page="./Register">New User? Create an account!</a></div>
+                                    </div>
+                                </div>
+                                <!-- Background image column using inline CSS-->
+                                <div class="col-lg-7 col-md-6 d-none d-md-block" style="background-image: url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=872&q=80'); background-size: cover; background-repeat: no-repeat; background-position: center"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-dark my-3" style="border-radius: 10px;">Resend</button>
-        </form>
+        </main>
     </div>
 </div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

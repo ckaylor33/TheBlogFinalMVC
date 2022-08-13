@@ -5,12 +5,24 @@
 }
 
 <header>
-    <h1>@ViewData["Title"]</h1>
     @{
         if (User.Identity.IsAuthenticated)
         {
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
+            <form class="container" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <div class="row">
+                    <div class="col-5">
+                        <h1>@ViewData["Title"]</h1>
+                        <button type="submit" class="nav-link btn btn-raised-warning text-dark">
+                            Click here to Logout
+                            <span class="material-icons ms-2">
+                                logout
+                            </span>
+                        </button>
+                    </div>
+                    <div class="col-7">
+                        <img src="/images/svg/Color logo - no background.svg" class="img-fluid"/>
+                    </div>
+                </div>
             </form>
         }
         else

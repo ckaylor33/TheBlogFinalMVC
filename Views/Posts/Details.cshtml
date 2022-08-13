@@ -8,23 +8,72 @@
 @inject UserManager<BlogUser> userManager
 @model PostDetailViewModel
 
-<article class="d-flex p-2">
-    <div class="row">
-        <div class="col-9 border-right">
-            @Html.Raw(Model.Post.Content)
+@if (User.IsInRole(nameof(BlogRole.Administrator)))
+{
+    <div class="flex-row d-flex justify-content-between p-2">
+        <h3 class="fw-bolder hover-underline-animation text-dark">
+            <span class="material-icons" style="color: #ff993b">
+                newspaper
+            </span>
+            @Model.Post.Title
+        </h3>
+        <a class="btn btn-text-warning p-1" asp-route-id="@Model.Post.Id" asp-action="Edit" asp-controller="Posts">
+            Edit Post
+            <span class="material-icons ms-1" style="color: #ff993b">
+                add_circle_outline
+            </span>
+        </a>
+    </div>
+
+    <hr />
+}
+else
+{
+    <h3 class="hover-underline-animation text-dark">
+        <span class="material-icons" style="color: #ff993b">
+            newspaper
+        </span>
+        @Model.Post.Title
+    </h3>
+    <hr />
+}
+
+
+
+<article class="d-flex d-md-inline-block d-md-grid pe-2 py-3 container mx-0 px-0">
+    <div class="row flex-fill justify-content-center">
+        <div class="col-md-9 border-end" />
+        <div class="justify-content-center flex-fill">
+            <img class="img-fluid pb-3 d-flex" @*style="height: 400px; width:max-content"*@ src="@imageService.DecodeImage(Model.Post.ImageData, Model.Post.ContentType)" />
         </div>
-        <div class="col-3 text-center fw-bold h6">
-            <div class="card">
-                <img class="card-img-top" src="/images/tags.png" alt="Tags...">
-                <div class="card-body">
-                    <h4 class="card-title">APP TAGS</h4>
-                    <div class="tagView">
-                        <!--IMPLEMEMT TAG SEARCH-->
-                        @foreach (var tag in Model.Tags)
-                        {
-                            <button class="mb-1 btn btn-small btn-warning btn-outline-dark">#@tag</button>
-                        }
-                    </div>
+        @Html.Raw(Model.Post.Content)
+    </div>
+    <div class="col-md-3 text-center justify-content-center border-top pt-sm-3">
+        <div class="card bg-light border-0">
+            <div class="row justify-content-center">
+                <a asp-action="About" asp-controller="Home" class="justify-content-center row">
+                    <img src="@imageService.DecodeImage(Model.Post.BlogUser.ImageData, Model.Post.BlogUser.ContentType)" class="img-fluid mt-3 card-img-top rounded-circle justify-content-center d-flex" style="height: auto; width: 150px" alt="Author" />
+                </a>
+                <a asp-action="About" asp-controller="Home" class="text-decoration-none">
+
+                    <h3 class="mt-2 fw-bolder card-title hover-underline-animation text-dark text-decoration-none">@Model.Post.BlogUser.FullName</h3>
+                </a>
+                <h6 class="">A software Developer based in the UK who specialises in building full stack applications with C# .NET</h6>
+                <div>@Model.Post.Created.ToString("ddd MM, yyyy")</div>
+            </div>
+
+            <img class="card-img-top mt-3" src="/images/svg2/Tags Color logo - no background.svg" style="height: 150px;" alt="Tags...">
+            <div class="card-body bg-light">
+                <h3 class="fw-bolder card-title mb-2">Popular Tags</h3>
+                <div class="tagView d-flex flex-wrap justify-content-center">
+                    @foreach (var tag in Model.Tags.Distinct().Take(12))
+                    {
+                        <form asp-action="SearchIndex" asp-controller="Posts">
+                            <input type="hidden" value="@tag" name="SearchTerm" />
+                            <button class="m-1 btn btn-sm btn-raised-warning" type="submit">#@tag</button>
+                        </form>
+
+                    }
                 </div>
             </div>
         </div>
@@ -32,16 +81,18 @@
 
 </article>
 
-<article class="d-flex p-2">
-    <hr />
-    <h3 class="text-center fw-bold">Tags</h3>
-    <div class="col text-center">
-        @foreach (var tag in Model.Post.Tags.ToList())
+
+<article class="d-flex p-2 flex-row border-top border-bottom">
+    <h3 class="fw-bolder col-2">Post Tags</h3>
+    <div class="col flex-grow-1 flex-row d-flex py-2">
+        @foreach (var tag in Model.Post.Tags.Distinct().ToList().Take(6))
         {
-            <button class="mb-1 btn btn-small btn-warning btn-outline-dark">#@tag.Text</button>
+            <form asp-action="SearchIndex" asp-controller="Posts" method="post">
+                <input type="hidden" value="@tag.Text" name="SearchTerm" />
+                <button class="mb-1 btn btn-sm btn-raised-warning mx-1">#@tag.Text</button>
+            </form>
         }
     </div>
-    <hr />
 </article>
 
 
@@ -53,18 +104,18 @@
             @Html.Hidden("Slug", Model.Post.Slug)
 
             <div class="form-group">
-                <label class="h2 control-label fw-bold">Add Comment</label>
-                <textarea name="body" class="form-control mb-2" rows="10"></textarea>
+                <label class="h3 control-label fw-bolder mt-3">Add Comment</label>
+                <textarea name="body" class="form-control" rows="10"></textarea>
             </div>
             <div class="d-grid">
-                <button type="submit" class="btn btn-dark btn-small">Submit</button>
+                <button type="submit" class="btn btn-raised-warning btn-small mt-3">Submit</button>
             </div>
         </form>
     }
     else
     {
         <div class="d-grid p-2">
-            <a class="btn btn-small btn-dark" asp-area="Identity" asp-page="/Account/Login">
+            <a class="btn btn-small btn-raised-warning mt-3" asp-area="Identity" asp-page="/Account/Login">
                 Login to add comments
             </a>
         </div>
@@ -75,13 +126,13 @@
     <br />
 
     <div class="d-grid px-2">
-        <a id="commentSection" class="btn btn-small btn-dark mb-2">@Model.Post.Comments.Count COMMENT(S)</a>
+        <a id="commentSection" class="btn btn-small btn-raised-warning mb-3">@Model.Post.Comments.Count COMMENT(S)</a>
     </div>
 
     @*CARD*@
     @foreach (var comment in Model.Post.Comments.OrderByDescending(c => c.Created))
     {
-        <div class="card p-3 mb-3 mx-2 bg-cf media-border">
+        <div class="card card-raised p-3 mb-3 mx-2 bg-white media-border">
             <div class="row g-0">
                 <div class="col-md-1">
                     <img src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" alt="@comment.BlogUser.DisplayName" class="align-self-start mr-3 rounded-pill img-thumbnail" style="width:60px;">
@@ -92,8 +143,8 @@
                         <h4>@comment.BlogUser.DisplayName</h4>
 
                         @****************************************************************
-                            SECTION 1: POST ON OR UPDATED ON
-                            *****************************************************************@
+                    SECTION 1: POST ON OR UPDATED ON
+                    *****************************************************************@
                         @if (comment.Deleted is not null)
                         {
                             <span class="small">
@@ -123,11 +174,11 @@
                         }
 
                         @*****************************************************************
-                            SECTION 2: HOW DO WE COMPOSE THE BODY
-                            *****************************************************************@
+                    SECTION 2: HOW DO WE COMPOSE THE BODY
+                    *****************************************************************@
                         @*****************************************************************
-                            SECTION 2A: Render pre text
-                            *****************************************************************@
+                    SECTION 2A: Render pre text
+                    *****************************************************************@
                         <br />
                         @if (comment.Deleted is not null)
                         {
@@ -141,8 +192,8 @@
                         <hr style="border: 0.5px solid black; background-color: black;" />
 
                         @*****************************************************************
-                            SECTION 2B: Render main body
-                            *****************************************************************@
+                    SECTION 2B: Render main body
+                    *****************************************************************@
                         @if (string.IsNullOrEmpty(comment.Body))
                         {
                             <span class="small font-italic">Comment not available...</span>
@@ -158,40 +209,38 @@
 
 
                         @****************************************************************
-                            SECTION 3: CAN WE RENDER THE EDIT BUTTON
-                            *****************************************************************@
+                    SECTION 3: CAN WE RENDER THE EDIT BUTTON
+                    *****************************************************************@
                         @if (comment.Moderated is null && comment.Deleted is null && comment.BlogUserId == userManager.GetUserId(User))
                         {
                             <hr style="border: 0.5px solid black; background-color: black;">
-                            <button data-bs-toggle="modal" data-bs-target="#editModal" class="btn-small btn-dark float-right fw-bold">EDIT</button>
+                            <button data-bs-toggle="modal" data-bs-target="#editModal" class="btn-sm btn-raised-warning float-right fw-bold">EDIT</button>
                         }
 
                         @****************************************************************
-                            SECTION 4: CAN WE RENDER THE MODERATE AND DELETE BUTTONS
-                            *****************************************************************@
+                    SECTION 4: CAN WE RENDER THE MODERATE AND DELETE BUTTONS
+                    *****************************************************************@
                         @if (User.IsInRole(BlogRole.Moderator.ToString()) && comment.Deleted is null)
                         {
                             <hr style="border: 0.5px solid black; background-color: black;">
                             <div class="row">
                                 <div class="col-2 d-grid me-3">
-                                    <button class="btn-small btn-dark fw-bold" data-bs-toggle="modal" data-bs-target="#moderate">MODERATE</button>
+                                    <button class="btn-sm btn-raised-warning fw-bold" data-bs-toggle="modal" data-bs-target="#moderate">MODERATE</button>
                                 </div>
                                 <div class="col-2 ms-3">
                                     <form asp-action="Delete" asp-controller="Comments" class="d-grid">
                                         @*@Html.Hidden("CommentId", comment.Id)
-                                        @Html.Hidden("Slug", comment.Post.Slug)*@
+                                @Html.Hidden("Slug", comment.Post.Slug)*@
                                         <input id="@comment.Id"
-                                        name="CommentId"
-                                        type="hidden"
-                                        value="@comment.Id"
-                                        />
+                                       name="CommentId"
+                                       type="hidden"
+                                       value="@comment.Id" />
                                         <input id="@comment.Post.Slug"
-                                        name="Slug"
-                                        type="hidden"
-                                        value="@comment.Post.Slug"
-                                        />
+                                       name="Slug"
+                                       type="hidden"
+                                       value="@comment.Post.Slug" />
 
-                                        <button type="submit" class="btn-small btn-dark fw-bold">DELETE</button>
+                                        <button type="submit" class="btn-sm btn-raised-warning fw-bold">DELETE</button>
                                     </form>
                                 </div>
                             </div>
@@ -213,7 +262,7 @@
                     </div>
 
                     <!-- Modal body -->
-                <div class="modal-body">
+                    <div class="modal-body">
                         <form asp-action="Edit" asp-controller="Comments">
                             @Html.Hidden("Id", comment.Id)
 
@@ -221,13 +270,13 @@
                                 <textarea name="Body" class="form-control" required>@comment.Body</textarea>
                             </div>
 
-                            <button class="btn-small btn-dark border-success fw-bold" type="submit">SUBMIT</button>
+                            <button class="btn-sm btn-raised-warning border-success fw-bold my-2" type="submit">SUBMIT</button>
                         </form>
                     </div>
 
                     <!-- Modal footer -->
-                <div class="modal-footer">
-                        <button type="button" class="btn-small btn-dark fw-bold" data-bs-dismiss="modal">CLOSE</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-sm btn-raised-warning fw-bold m-2" data-bs-dismiss="modal">CLOSE</button>
                     </div>
 
                 </div>
@@ -239,13 +288,13 @@
                 <div class="modal-content">
 
                     <!-- Modal Header -->
-                <div class="modal-header">
+                    <div class="modal-header">
                         <h4 class="modal-title">Moderating Comment...</h4>
 
                     </div>
 
                     <!-- Modal body -->
-                <div class="modal-body">
+                    <div class="modal-body">
                         <form asp-action="Moderate" asp-controller="Comments">
                             @Html.Hidden("Id", comment.Id)
                             @Html.Hidden("Body", comment.Body)
@@ -268,14 +317,13 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col d-grid">
-                                        <button class="btn-small btn-dark border-success fw-bold" type="submit">SUBMIT</button>
+                                        <button class="btn-sm btn-raised-warning border-success fw-bold my-2" type="submit">SUBMIT</button>
                                     </div>
                                     <div class="col d-grid">
-                                        <button class="btn-small btn-dark fw-bold" type="button" data-bs-dismiss="modal">CLOSE</button>
+                                        <button class="btn-sm btn-raised-warning fw-bold m-2" type="button" data-bs-dismiss="modal">CLOSE</button>
                                     </div>
                                 </div>
                             </div>
-
                         </form>
                     </div>
                 </div>

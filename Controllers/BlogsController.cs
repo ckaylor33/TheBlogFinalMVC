@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TheBlogFinalMVC.Data;
 using TheBlogFinalMVC.Services;
+using TheBlogFinalMVC.Enums;
+using X.PagedList;
 
 namespace TheBlogFinalMVC.Models
 {
@@ -27,11 +29,38 @@ namespace TheBlogFinalMVC.Models
         }
 
         // GET: Blogs
+        [Authorize(Roles = nameof(BlogRole.Administrator))]
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Blogs.Include(b => b.BlogUser);
+            BlogUser blogUser = await _userManager.GetUserAsync(User);
 
-            return View(await applicationDbContext.ToListAsync());
+            List<Blog> allBlogs = await _context.Blogs
+                 .Include(b => b.BlogUser)
+                 .OrderByDescending(p => p.Created)
+                 .ToListAsync();
+
+            return View(allBlogs);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ProductionReady(int? page)
+        {
+            BlogUser blogUser = await _userManager.GetUserAsync(User);
+
+            var pageNumber = page ?? 1;
+            var pageSize = 6;
+
+            IPagedList<Blog> productionBlogs = await _context.Blogs
+                .Where(b => b.Posts.Any(p => p.ReadyStatus == ReadyStatus.ProductionReady))
+                 .Include(b => b.BlogUser)
+                 .OrderByDescending(p => p.Created)
+                 .ToList()
+                 .ToPagedListAsync(pageNumber, pageSize);
+
+            return View(productionBlogs);
+
         }
 
         // GET: Blogs/Details/5

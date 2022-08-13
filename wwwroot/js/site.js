@@ -3,7 +3,7 @@
     * Copyright 2013-2021 Start Bootstrap
     * Licensed under SEE_LICENSE (https://github.com/StartBootstrap/material-admin-pro/blob/master/LICENSE)
     */
-    window.addEventListener('DOMContentLoaded', event => {
+window.addEventListener('DOMContentLoaded', event => {
     // Enable tooltips globally
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -15,6 +15,7 @@
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
         return new bootstrap.Popover(popoverTriggerEl);
     });
+
 
     // Activate Bootstrap scrollspy for the sticky nav component
     const navStick = document.body.querySelector('#navStick');

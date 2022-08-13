@@ -2,11 +2,14 @@
 @using TheBlogFinalMVC.Services
 @using TheBlogFinalMVC.Models
 @using TheBlogFinalMVC.Enums
-@using TheBlogFinalMVC.Services
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
 
 @inject UserManager<BlogUser> UserManager
 @inject IImageService imageService
-@model IEnumerable<Blog>
+
+@model IPagedList<Blog>
 
 @{
     ViewData["Title"] = "Index";
@@ -79,16 +82,14 @@ else
                         </a>
                         <span class="card-body text-muted">by <a class="text-decoration-none text-muted hover-underline-animation" asp-action="About" asp-controller="Home">@blog.BlogUser.FirstName</a></span>
 
-                        @if (User.IsInRole(BlogRole.Administrator.ToString()) || blogUser.Id == blog.BlogUserId)
+                        @if (User.IsInRole(BlogRole.Administrator.ToString()))
                         {
                             <a class="btn btn-text-warning" asp-action="Edit" asp-controller="Blogs" asp-route-id="@blog.Id">Edit Blog</a>
-                            <a asp-action="Delete" asp-route-id="@blog.Id" class="btn btn-text-warning">Delete</a>
                         }
                     </div>
                 </div>
             </div>
         </div>
-
     }
 
 </div>
@@ -97,4 +98,18 @@ else
 
 
 
-
+<div class="row d-flex p-2">
+    <div class="col h3">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    </div>
+</div>
+<div class="row d-flex p-2">
+    <div class="col">
+        @Html.PagedListPager(Model, page => Url.Action("ProductionReady", new { id = Model.FirstOrDefault().Id, page = page }),
+        new PagedListRenderOptions
+        {
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" }
+        })
+    </div>
+</div>

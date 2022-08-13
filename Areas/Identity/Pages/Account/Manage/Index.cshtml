@@ -11,27 +11,30 @@
     <div class="col-md-6">
         <form id="profile-form" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
+            <div class="form-floating mb-3">
                 <input asp-for="Username" class="form-control" disabled />
                 <label asp-for="Username" class="form-label"></label>
             </div>
-            <div class="form-floating">
+            <div class="form-floating mb-3">
                 <input asp-for="Input.PhoneNumber" class="form-control" />
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Input.Image" class="control-label"></label>
-                <input asp-for="Input.Image" type="file" class="form-control"/>
+                <input asp-for="Input.Image" type="file" class="form-control" />
             </div>
 
 
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            <div class="text-center">
+                <button id="update-profile-button" type="submit" class="w-100 btn btn-raised-warning text-center d-inline-block">Save</button>
+            </div>
+
         </form>
     </div>
     <div class="col-md-6">
-        <img src="@Model.CurrentImage" class="img-fluid rounded-circle pb-4 ps-3" width="50%;"/>
+        <img src="@Model.CurrentImage" class="img-fluid rounded-circle pb-4 ps-3" width="60%;" />
     </div>
 </div>
 

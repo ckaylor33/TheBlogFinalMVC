@@ -9,13 +9,14 @@
 
 <h4>Post</h4>
 <hr />
-<div class="row ps-3">
-    <div class="col-md-8">
-        <form enctype="multipart/form-data" asp-action="Edit">
+<div class="row">
+    <div class="col-md-9">
+        <form enctype="multipart/form-data" method="post" asp-action="Edit">
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <input type="hidden" asp-for="Id" />
+@*            <input type="hidden" asp-for="Slug"/>*@
 
             <div class="form-group">
                 <label asp-for="BlogId" class="control-label"></label>
@@ -82,14 +83,14 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <button type="submit" value="Save" class="btn btn-primary">Save</button>
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Details" asp-controller="Posts" asp-route-slug="@Model.Slug">Back to Post</a>
 </div>
 
 @section Scripts{

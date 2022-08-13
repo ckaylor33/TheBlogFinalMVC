@@ -94,7 +94,6 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
             ViewData["MainText"] = "Register";
 
             ReturnUrl = returnUrl;
@@ -153,7 +152,6 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
                 }
                 foreach (var error in result.Errors)
                 {
-                    ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
                     ViewData["MainText"] = "Check Errors";
                     ModelState.AddModelError(string.Empty, error.Description);
                 }

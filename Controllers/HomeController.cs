@@ -29,27 +29,36 @@ namespace TheBlogFinalMVC.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Homepage(int? page)
         {
-            var pageNumber = page ?? 1;
-            var pageSize = 6;
 
-            var blogs = _context.Blogs
+            HomepageViewModel homepage = new();
+
+
+            homepage.Blogs = await _context.Blogs
+                .Where(b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
                 .Include(b => b.BlogUser)
                 .OrderByDescending(p => p.Created)
-                .ToPagedListAsync(pageNumber, pageSize);
+                .Take(6)
+                .ToListAsync();
+
+            homepage.Posts = await _context.Posts.Include(p => p.BlogUser)
+                                                 .Where(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady)
+                                                 .OrderByDescending(p => p.Created)
+                                                 .Take(6)
+                                                 .ToListAsync();
+
 
             /*            var blogs = _context.Blogs.Where(
                 b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
                 .OrderByDescending(p => p.Created)
                 .ToPagedListAsync(pageNumber, pageSize);*/
 
-            var imageURL = Url.Content("~/images/home-bg.jpg");
-            ViewData["HeaderImage"] = imageURL;
-            ViewData["MainText"] = "Charlie Blogs";
+
+            ViewData["MainText"] = "CK Blogs";
             ViewData["SubText"] = "Follow my Coding Journey";
 
-            return View(await blogs);
+            return View(homepage);
         }
 
         public IActionResult About()

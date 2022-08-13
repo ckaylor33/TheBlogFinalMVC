@@ -1,45 +1,57 @@
-﻿@using TheBlogFinalMVC.Models
+﻿@using Microsoft.AspNetCore.Identity
 @using TheBlogFinalMVC.Services
+@using TheBlogFinalMVC.Models
 @using TheBlogFinalMVC.Enums
-@using Microsoft.AspNetCore.Identity
 @using X.PagedList
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
 
-@inject UserManager<BlogUser> userManager
+@inject UserManager<BlogUser> UserManager
 @inject IImageService imageService
-
 @model IPagedList<Post>
 
+@{
+    ViewData["Title"] = "Production Posts";
 
-<div class="flex-row d-flex justify-content-between p-2">
-    <h3 class="hover-underline-animation text-muted">
-        <span class="material-icons" style="color: #ff993b">
-            newspaper
-        </span>
-        Search Results
-    </h3>
-</div>
+    BlogUser blogUser = await UserManager.GetUserAsync(User);
+}
+
+@if (User.IsInRole(BlogRole.Administrator.ToString()))
+{
+    <div class="flex-row d-flex justify-content-between p-2">
+        <h3 class="hover-underline-animation text-muted">
+            <span class="material-icons" style="color: #ff993b">
+                newspaper
+            </span> CK Blogs
+            <span style="font-size: smaller">- All Posts</span>
+        </h3>
+        <a class="btn btn-text-warning p-1" asp-action="Create" asp-controller="Blogs">
+            Create Blog
+            <span class="material-icons ms-1" style="color: #ff993b">
+                add_circle_outline
+            </span>
+        </a>
+    </div>
+
+    <hr class="mx-2" />
+}
+else
+{
+    <div class="flex-row d-flex justify-content-between p-2">
+        <h3 class="hover-underline-animation text-muted">
+            <span class="material-icons" style="color: #ff993b">
+                newspaper
+            </span> CK Blogs
+            <span style="font-size: smaller">- All Posts</span>
+        </h3>
+    </div>
+}
 
 
-
-<hr class="mx-2" />
-
-
-<div class="row d-flex p-2">
+<div class="row d-flex justify-content-center p-2">
     @foreach (var post in Model)
     {
-        //Is the logged in user the Author of this post??
-        var isAuthor = false;
-        if (User.Identity.IsAuthenticated)
-        {
-            isAuthor = User.IsInRole(BlogRole.Administrator.ToString());
-            isAuthor = isAuthor && (post.BlogUserId == userManager.GetUserId(User));
-        }
-
-
-        <div class="col-sm-12 col-lg-4 col-md-6 pb-2 my-3">
-
+        <div class="col-sm-12 col-md-6 col-lg-4 my-3">
             <div class="card card-raised h-100">
                 <a class="ripple-gray" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
                     <div class="img-hover-zoom--brightness">
@@ -50,7 +62,7 @@
                     <a class="my-2 card-title text-muted text-decoration-none hover-underline-animation" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
                         @post.Title
                     </a>
-                    <p class="card-text">@post.Created.Date.ToString("dd-MM-yyyy")</p>
+                    <p class="card-text">@post.Created.Date.ToString("dd, MMM yyyy")</p>
                     <h4 class="card-text card-subtitle my-2 pb-2" id="tooltip"
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
@@ -59,28 +71,26 @@
                         @post.Abstract
                     </h4>
 
-
-
                 </div>
                 <div class="card-footer bg-white flex-row p-2 d-flex justify-content-between">
                     <div class="card-actions">
 
 
                         <a class="media" asp-action="About" asp-controller="Home">
-                            <img class="rounded-circle" src="@imageService.DecodeImage(post.BlogUser?.ImageData, post.BlogUser?.ContentType)" style="width:40px; height: 40px" />
+                            <img class="rounded-circle" src="@imageService.DecodeImage(post.BlogUser.ImageData, post.BlogUser.ContentType)" style="width:40px; height: 40px" />
                         </a>
-                        <span class="card-body text-muted">by <a class="text-decoration-none text-muted hover-underline-animation" asp-action="About" asp-controller="Home">@post.BlogUser?.FirstName</a></span>
+                        <span class="card-body text-muted">by <a class="text-decoration-none text-muted hover-underline-animation" asp-action="About" asp-controller="Home">@post.BlogUser.FirstName</a></span>
 
-                        @if (isAuthor)
+                        @if (User.IsInRole(BlogRole.Administrator.ToString()))
                         {
-                            <a class="btn btn-text-warning" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">Edit Post</a>
+                            <a class="btn btn-text-warning" asp-action="Edit" asp-controller="Blogs" asp-route-id="@post.Id">Edit Blog</a>
                         }
                     </div>
                 </div>
             </div>
-
         </div>
     }
+
 </div>
 
 <hr />
@@ -93,7 +103,7 @@
 <div class="row">
     <div class="col">
         @*//page number pushed into the page value, but SearchTerm is persisted by using ViewData*@
-        @Html.PagedListPager(Model, page => Url.Action("SearchIndex", new { page = page, searchTerm = ViewData["SearchTerm"] }),
+        @Html.PagedListPager(Model, page => Url.Action("ProductionReady", new { id = Model.FirstOrDefault().Id, page = page }),
         new PagedListRenderOptions
         {
         LiElementClasses = new string[] { "page-item" },
@@ -101,3 +111,7 @@
         })
     </div>
 </div>
+
+
+
+

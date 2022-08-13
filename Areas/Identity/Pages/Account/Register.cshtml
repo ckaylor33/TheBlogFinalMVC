@@ -4,91 +4,84 @@
     ViewData["Title"] = "Register";
 }
 
-<h1 class="row p-6 m-4 ps-2">@ViewData["Title"]</h1>
 
-<div class="row p-6 m-4">
-    <div class="col-md-4">
-        <form id="registerForm" enctype="multipart/form-data" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            
-            <h2>Create a new account.</h2>
-            <hr />
+<div id="layoutAuthentication">
+    <!-- Layout content-->
+    <div id="layoutAuthentication_content">
+        <!-- Main page content-->
+        <main>
+            <!-- Main content container-->
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xxl-7 col-xl-10">
+                        <div class="card card-raised shadow-10 mt-5 mt-xl-10 mb-5">
+                            <div class="card-body p-5">
+                                <!-- Auth header with logo image-->
+                                <div class="text-center">
+                                    <img class="mb-3" src="/images/svg/Color logo - no background.svg" alt="..." style="height: 68px" />
+                                    <h1 class="display-5 mb-3">Create Account</h1>
+                                </div>
+                                <!-- Register new account form-->
+                                <form method="post">
+                                    <div class="row">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="Input.FirstName"></label>
-                <input asp-for="Input.FirstName" class="form-control" autocomplete="username" aria-required="true" placeholder="First Name"/>
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Input.LastName"></label>
-                <input asp-for="Input.LastName" class="form-control" autocomplete="username" aria-required="true" placeholder="Last Name"/>
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Input.DisplayName"></label>
-                <input asp-for="Input.DisplayName" class="form-control" autocomplete="username" aria-required="true" placeholder="Display Name"/>
-                <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="Email Address"/>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">                   
-                <label asp-for="Input.ImageFile" style="color: #212529;">Select Image</label>
-                <input type="file" asp-for="Input.ImageFile" class="form-control"placeholder="Custom Image" accept=".png, .jpg, .jpeg, .gif, .bmp, .tif"/>
-                <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Password"/>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Input.ConfirmPassword"></label>
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Confirm Password"/>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-dark my-3" style="border-radius: 10px;">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2 pt-1">
-        <section>
-            <h3>Build with me in C#.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            I'll send you an email confirmation with some details after you submit this form. See you! :)
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
+                                        <div class="form-floating col-sm-6 mb-4">
+                                            <input asp-for="Input.FirstName" class="form-control w-100" autocomplete="username" aria-required="true" placeholder="First Name" />
+                                            <label asp-for="Input.FirstName" class="form-label"></label>
+                                            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-floating col-sm-6 mb-4">
+                                            <input asp-for="Input.LastName" class="form-control w-100" autocomplete="username" aria-required="true" placeholder="Last Name" />
+                                            <label asp-for="Input.LastName"></label>
+                                            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-floating col-sm-6 mb-4">
+                                            <input asp-for="Input.DisplayName" class="form-control w-100" autocomplete="username" aria-required="true" placeholder="Display Name" />
+                                            <label asp-for="Input.DisplayName" class="form-label"></label>
+                                            <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-floating col-sm-6 mb-4">
+                                            <input asp-for="Input.Email" class="form-control w-100" autocomplete="username" aria-required="true" placeholder="Email Address" />
+                                            <label asp-for="Input.Email" class="form-label"></label>
+                                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col mb-4">
+                                            <label asp-for="Input.ImageFile" style="color: #212529;">Select Image</label>
+                                            <input type="file" asp-for="Input.ImageFile" class="form-control w-100" placeholder="Custom Image" accept=".png, .jpg, .jpeg, .gif, .bmp, .tif" />
+                                            <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-floating col-md-6 mb-4">
+                                            <input asp-for="Input.Password" class="form-control w-100" autocomplete="new-password" aria-required="true" placeholder="Password" />
+                                            <label asp-for="Input.Password" class="form-label"></label>
+                                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-floating col-md-6 mb-4">
+                                            <input asp-for="Input.ConfirmPassword" class="form-control w-100" autocomplete="new-password" aria-required="true" placeholder="Confirm Password" />
+                                            <label asp-for="Input.ConfirmPassword" class="form-label"></label>
+                                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                                        <a class="small fw-500 text-decoration-none link-dark hover-underline-animation" asp-page="./Login">Sign in instead?</a>
+                                        <button type="submit" class="btn btn-raised-warning my-3" style="border-radius: 10px;">Register</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                    </form>
-                }
-            }
-        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 </div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

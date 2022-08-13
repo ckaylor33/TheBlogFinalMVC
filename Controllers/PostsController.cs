@@ -38,7 +38,6 @@ namespace TheBlogFinalMVC.Controllers
         public async Task<IActionResult> SearchIndex(int? page, string searchTerm)
         {
             ViewData["SearchTerm"] = searchTerm;
-            ViewData["HeaderImage"] = "/images/home-bg.jpg";
             ViewData["MainText"] = searchTerm;
 
             var pageNumber = page ?? 1;
@@ -50,14 +49,39 @@ namespace TheBlogFinalMVC.Controllers
         }
 
         // GET: Posts
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> AllPosts(int? page)
         {
-            var applicationDbContext = _context.Posts.Include(p => p.Blog).Include(p => p.BlogUser);
+            var pageNumber = page ?? 1;
+            var pageSize = 6;
 
-            ViewData["HeaderImage"] = "/images/home-bg.jpg";
-            ViewData["MainText"] = "Posts Index Page";
+            var allPosts = await _context.Posts.Include(p => p.Blog).Include(p => p.BlogUser)
+                                         .ToList()
+                                         .OrderByDescending(p => p.Created)
+                                         .ToPagedListAsync(pageNumber, pageSize);
 
-            return View(await applicationDbContext.ToListAsync());
+
+            return View(allPosts);
+        }
+
+        // GET: Posts
+        [HttpGet]
+        public async Task<IActionResult> ProductionReady(int? page)
+        {
+
+            var pageNumber = page ?? 1;
+            var pageSize = 6;
+
+            IPagedList<Post> productionPosts = await _context.Posts.Include(p => p.Blog)
+                                                     .Include(p => p.BlogUser)
+                                                     .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                                                     .ToList()
+                                                     .OrderByDescending(p => p.Created)
+                                                     .ToPagedListAsync(pageNumber, pageSize);
+
+
+            return View(productionPosts);
         }
 
         //BlogPostIndex
@@ -72,15 +96,14 @@ namespace TheBlogFinalMVC.Controllers
             var pageSize = 6;
 
             var blogs = await _context.Blogs.Include(p => p.Posts).FirstOrDefaultAsync(p => p.Id == id);
-            var posts = await _context.Posts
+
+            var posts = await _context.Posts.Include(p => p.BlogUser)
                 .Where(p => p.BlogId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
                 .OrderByDescending(p => p.Created)
                 .ToPagedListAsync(pageNumber, pageSize);
 
-            var imageURL = Url.Content("~/images/home-bg.jpg");
-            ViewData["HeaderImage"] = imageURL;
-            ViewData["MainText"] = blogs.Name;
-            ViewData["SubText"] = blogs.Description;
+            ViewData["MainText"] = blogs?.Name;
+            ViewData["SubText"] = blogs?.Description;
 
             return View(posts);
         }
@@ -116,9 +139,6 @@ namespace TheBlogFinalMVC.Controllers
 
             return View(dataVM);
         }
-
-
-
 
 
         /*        public async Task<IActionResult> Details(string slug)
@@ -214,7 +234,7 @@ namespace TheBlogFinalMVC.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new { slug = post.Slug });
             }
 
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
@@ -315,8 +335,9 @@ namespace TheBlogFinalMVC.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(AllPosts));
             }
+
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
             ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", post.BlogUserId);
             return View(post);

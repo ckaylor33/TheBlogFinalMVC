@@ -1,7 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using TheBlogFinalMVC.Models
+@using TheBlogFinalMVC.Data
+@using TheBlogFinalMVC.Enums
 
 @inject UserManager<BlogUser> UserManager
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,13 +15,17 @@
 
     <title>@ViewData["Title"] - CK Blogs</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="icon" href="~/images/png/Color logo - no background.png">
+
     <!-- Load Material Icons from Google Fonts-->
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet" />
     <!-- Roboto and Roboto Mono fonts from Google Fonts-->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500" rel="stylesheet" />
-    
-      <!-- Load custom stylesheet-->
+
+    <!-- Load custom stylesheet-->
     <link href="~/css/Custon.css" rel="stylesheet" />
     <!-- Load main stylesheet-->
     <link href="~/css/styles.css" rel="stylesheet" />
@@ -34,30 +40,22 @@
     BlogUser blogUser = await UserManager.GetUserAsync(User);
 }
 
-<body class="nav-fixed bg-light">
+<body class="bg-light nav-fixed">
     <!-- Top app bar navigation menu-->
-    <nav class="top-app-bar navbar navbar-expand" style="background: #fff;">
+    <nav class="top-app-bar navbar navbar-expand" style="background-color:#fff">
         <div class="container-fluid px-4">
             <!-- Drawer toggle button-->
-            <button class="btn btn-lg btn-icon order-1 order-lg-0" id="drawerToggle" href="javascript:void(0);"><i class="material-icons">menu</i></button>
+            <button class="btn btn-lg btn-icon order-1 order-lg-0 mx-1" id="drawerToggle" href="javascript:void(0);"><i class="material-icons">menu</i></button>
 
             <!-- Navbar brand-->
-            <a class="navbar-brand me-auto" asp-controller="Home" asp-action="Index"><div class="text-uppercase font-monospace text-dark">CK Codes</div></a>
-
-            <form asp-action="SearchIndex" asp-controller="Posts">
-                <div class="input-group">
-                    <input type="text" name="SearchTerm" class="form-control" style="border-radius: 10px 0px 0px 10px;" placeholder="Search Term">
-                    <div class="input-group-append d-grid">
-                        <button class="btn btn-sm" style="border-radius: 0px 10px 10px 0px; background: #ff993b;" type="submit">Search</button>
-                    </div>
-                </div>
-            </form>
+            <a class="navbar-brand me-auto" asp-controller="Home" asp-action="Homepage"><img src="\images\svg\Color logo - no background.svg" alt="..." style="height: 68px" /></a>
 
             <!-- Navbar items-->
             <partial name="_LoginPartial" />
         </div>
     </nav>
 
+    <!-- Top alert END -->
     <!-- Layout wrapper-->
     <div id="layoutDrawer">
         <!-- Layout navigation-->
@@ -66,27 +64,41 @@
             <nav class="drawer accordion drawer-light bg-white" id="drawerAccordion">
                 <div class="drawer-menu">
                     <div class="nav">
-                        <!-- Drawer section heading (Account)-->
+                        @*                        <!-- Drawer section heading (Account)-->
                         <div class="drawer-menu-heading d-sm-none">Account</div>
                         <!-- Drawer link (Notifications)-->
                         <a class="nav-link d-sm-none" href="#!">
-                            <div class="nav-link-icon"><i class="material-icons">notifications</i></div>
-                            Notifications
+                        <div class="nav-link-icon"><i class="material-icons">notifications</i></div>
+                        Notifications
                         </a>
                         <!-- Drawer link (Messages)-->
                         <a class="nav-link d-sm-none" href="#!">
-                            <div class="nav-link-icon"><i class="material-icons">mail</i></div>
-                            Messages
-                        </a>
-                        <!-- Divider-->
-                        <div class="drawer-menu-divider d-sm-none"></div>
+                        <div class="nav-link-icon"><i class="material-icons">mail</i></div>
+                        Messages
+                        </a>*@
+
                         <!-- Drawer section heading (Company)-->
                         <div class="drawer-menu-heading">CK Blogs</div>
+
+
+                        <form asp-action="SearchIndex" asp-controller="Posts">
+                            <div class="input-group rounded nav-item ms-3 pe-0 me-0" style="width: 90%">
+                                <div class="form-outline ms-0">
+                                    <input type="text" id="form1" name="SearchTerm" class="form-control" placeholder="Search Posts">
+                                </div>
+                                <button class="btn btn-sm" type="submit">
+                                    <span class="material-icons" style="color: #ff993b">
+                                        search
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+
                         <!-- Divider-->
-                        <div class="drawer-menu-divider d-sm-none"></div>
+                        <div class="drawer-menu-divider"></div>
 
                         <!-- Link (Home)-->
-                        <a class="nav-link" asp-controller="Home" asp-action="Index">
+                        <a class="nav-link" asp-controller="Home" asp-action="Homepage">
                             <div class="nav-link-icon" style="color: #ff993b"><i class="material-icons">home</i></div>
                             Home
                         </a>
@@ -109,31 +121,62 @@
                                 Create Blog
                             </a>
                             <!-- Link (Create Post)-->
-                            <a class="nav-link" asp-area="" asp-controller="Blogs" asp-action="Create">
+                            <a class="nav-link" asp-area="" asp-controller="Posts" asp-action="Create">
                                 <div class="nav-link-icon" style="color: #ff993b"><i class="material-icons">post_add</i></div>
                                 Create Post
                             </a>
                         }
 
-                        <!-- Drawer link (Blogs) -->
-                        <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseBlogs" aria-expanded="false" aria-controls="collapseDashboards">
-                            <div class="nav-link-icon"style="color: #ff993b"><i class="material-icons">feed</i></div>
-                            Blog Topics
-                            <div class="drawer-collapse-arrow"><i class="material-icons">expand_more</i></div>
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <!-- Drawer link (Blogs) -->
+                            <a class="nav-link" asp-controller="Blogs" asp-action="Index">
+                                <div class="nav-link-icon" style="color: #ff993b"><i class="material-icons">feed</i></div>
+                                Blog Categories
+                            </a>
+                        }
+                        else
+                        {
+                            <!-- Drawer link (Blogs) -->
+                            <a class="nav-link" asp-controller="Blogs" asp-action="ProductionReady">
+                                <div class="nav-link-icon" style="color: #ff993b"><i class="material-icons">feed</i></div>
+                                Blog Categories
+                            </a>
+                        }
+
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <!-- Drawer link (Blogs) -->
+                            <a class="nav-link" asp-controller="Posts" asp-action="AllPosts">
+                                <div class="nav-link-icon" style="color: #ff993b"><i class="material-icons">feed</i></div>
+                                All Posts
+                            </a>
+                        }
+                        else
+                        {
+                            <!-- Drawer link (Blogs) -->
+                            <a class="nav-link" asp-controller="Posts" asp-action="ProductionReady">
+                                <div class="nav-link-icon" style="color: #ff993b"><i class="material-icons">feed</i></div>
+                                All Posts
+                            </a>
+                        }
+
+
+                        @*                            <div class="collapse" id="collapseAdmin" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
+                        <nav class="drawer-menu-nested nav">
+                        <a class="nav-link" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id">
+                        Something
                         </a>
-                        <!-- Nested drawer nav (Blogs Links) TODO - Loop over categories -->
-                        <div class="collapse" id="collapseBlogs" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
-                            <nav class="drawer-menu-nested nav">
-                                <a asp-action="Blogs" asp-controller="Index">Looped over blog topics</a>
-                            </nav>
-                        </div>
+                        </nav>
+                        </div>*@
+
 
                         <!-- Divider-->
                         <div class="drawer-menu-divider"></div>
                     </div>
                 </div>
-                <!-- Drawer footer        -->
-                <div class="drawer-footer border-top">
+                <!-- Drawer footer -->
+                <div class="drawer-footer border-top" style="min-height: 76px">
                     <div class="d-flex align-items-center">
                         <i class="material-icons" style="color: #ff993b">account_circle</i>
                         <div class="ms-3">
@@ -158,6 +201,29 @@
         <div id="layoutDrawer_content">
             <!-- Main page content-->
             <main>
+                <div id="topBanner" class=" alert alert-warning py-2 m-0 bg-primary border-0 rounded-0 alert-dismissible fade show text-center overflow-hidden" role="alert">
+                    <!-- SVG shape START -->
+                    <figure class="position-absolute top-50 start-50 translate-middle">
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="1500" height="560" preserveAspectRatio="none" viewBox="0 0 1440 560">
+                            <g mask="url(&quot;#SvgjsMask1058&quot;)" fill="none">
+                                <rect width="1848" height="481" x="0" y="0" fill="rgba(255, 153, 59, 1)"></rect>
+                                <path d="M0,449.918C120.882,455.259,243.173,602.195,344.902,536.679C446.669,471.138,359.195,297.107,408.753,186.671C457.767,77.448,631.925,29.551,626.136,-90.025C620.495,-206.544,473.719,-258.31,383.622,-332.411C308.445,-394.241,237.522,-463.72,143.088,-487.313C50.692,-510.397,-41.424,-475.639,-135.701,-462.156C-247.677,-446.142,-374.39,-471.713,-462.445,-400.711C-553.46,-327.323,-581.096,-201.603,-601.59,-86.496C-622.609,31.557,-631.556,156.602,-581.036,265.35C-530.655,373.798,-439.823,470.84,-325.856,507.042C-218.583,541.118,-112.445,444.95,0,449.918" fill="#fb7900"></path>
+                                <path d="M1440 1125.9940000000001C1556.2 1130.992 1689.819 1162.44 1779.8229999999999 1088.774 1869.935 1015.02 1832.9569999999999 867.4359999999999 1883.8609999999999 762.705 1936.682 654.031 2099.007 587.322 2081.673 467.741 2064.334 348.12 1899.0149999999999 320.725 1808.228 240.928 1732.731 174.57 1687.681 72.57299999999998 1593.165 38.36900000000003 1496.495 3.3859999999999673 1392.806 37.028999999999996 1291.394 53.89499999999998 1176.032 73.08100000000002 1044.596 63.403999999999996 959.607 143.73700000000002 873.126 225.48000000000002 846.33 355.634 846.267 474.634 846.209 585.266 912.646 679.2139999999999 959.2719999999999 779.5409999999999 1005.553 879.126 1029.372 996.12 1118.461 1060.325 1209.0430000000001 1125.606 1328.449 1121.196 1440 1125.9940000000001" fill="#ffba7a"></path>
+                            </g>
+                            <defs>
+                                <mask id="SvgjsMask1058">
+                                    <rect width="1440" height="560" fill="#ffffff"></rect>
+                                </mask>
+                            </defs>
+                        </svg>
+                    </figure>
+                    <!-- SVG shape END -->
+                    <div class="position-relative">
+                        <p class="text-white m-0">Check out my Portfolio to learn more<a href="#" target="_blank" class="btn btn-s btn-outline-light ms-3 mb-0">View now!</a></p>
+                    </div>
+                    <!-- Close button -->
+                    <button type="button" onclick="hideBanner()" class="btn-close btn-close-white opacity-9 p-3" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
                 <div class="container-xl p-5">
                     @RenderBody()
                 </div>
@@ -165,33 +231,33 @@
 
             <!-- Footer-->
             <!-- Min-height is set inline to match the height of the drawer footer-->
-            <footer class="py-4 mt-auto border-top" style="min-height: 74px">
+            <footer class="py-4 mt-auto border-top" style="max-height: 76px">
                 <div class="container-xl px-5">
                     <div class="d-flex flex-column flex-sm-row align-items-center justify-content-sm-between small">
-                        <div class="me-sm-2">Copyright &copy; <a href="https://charliekaylor.com" target="_blank">charliekaylor.com</a> @DateTimeOffset.Now.Year</div>
+                        <div class="me-sm-2 mb-2 text-muted">Copyright &copy; <a class="text-decoration-none text-muted hover-underline-animation" href="https://charliekaylor.com" target="_blank">charliekaylor.com</a> @DateTimeOffset.Now.Year</div>
                         <div class="d-flex ms-sm-2">
 
                             <ul class="list-inline text-center">
                                 <li class="list-inline-item">
                                     <a href="#!">
                                         <span class="fa-stack fa-lg">
-                                            <i class="fas fa-circle fa-stack-2x"></i>
-                                            <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                                            <i class="fas fa-circle fa-stack-2x" style="color: #ff993b"></i>
+                                            <i class="fab fa-instagram fa-stack-1x fa-inverse"></i>
                                         </span>
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a href="#!">
                                         <span class="fa-stack fa-lg">
-                                            <i class="fas fa-circle fa-stack-2x"></i>
-                                            <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                                            <i class="fas fa-circle fa-stack-2x" style="color: #ff993b"></i>
+                                            <i class="fab fa-linkedin-in fa-stack-1x fa-inverse"></i>
                                         </span>
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a href="#!">
                                         <span class="fa-stack fa-lg">
-                                            <i class="fas fa-circle fa-stack-2x"></i>
+                                            <i class="fas fa-circle fa-stack-2x" style="color: #ff993b"></i>
                                             <i class="fab fa-github fa-stack-1x fa-inverse"></i>
                                         </span>
                                     </a>
@@ -205,13 +271,13 @@
             </footer>
         </div>
     </div>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
     <!-- Load Bootstrap JS bundle-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
-    
     <!--Summernote-->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
