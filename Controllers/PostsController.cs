@@ -177,7 +177,7 @@ namespace TheBlogFinalMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BlogId,Title,Abstract,Content,ReadyStatus,Image")] Post post, List<string> tagValues)
+        public async Task<IActionResult> Create([Bind("BlogId,Title,Abstract,Content,ReadyStatus,Image,PostLocation")] Post post, List<string> tagValues)
         {
             if (ModelState.IsValid) //if not valid, show create view again below
             {
@@ -265,7 +265,7 @@ namespace TheBlogFinalMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile NewImage, List<string> tagValues)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus, PostLocation")] Post post, IFormFile NewImage, List<string> tagValues)
         {
             if (id != post.Id)
             {
@@ -285,6 +285,7 @@ namespace TheBlogFinalMVC.Controllers
                     originalPost.Abstract = post.Abstract;
                     originalPost.Content = post.Content;
                     originalPost.ReadyStatus = post.ReadyStatus;
+                    originalPost.PostLocation = post.PostLocation;
 
                     var newSlug = _slugService.UrlFriendly(post.Title);
                     if (newSlug != originalPost.Slug)

@@ -45,16 +45,17 @@ namespace TheBlogFinalMVC.Controllers
             homepage.Posts = await _context.Posts.Include(p => p.BlogUser)
                                                  .Where(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady)
                                                  .OrderByDescending(p => p.Created)
-                                                 .Take(6)
                                                  .ToListAsync();
 
 
-            /*            var blogs = _context.Blogs.Where(
-                b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
-                .OrderByDescending(p => p.Created)
-                .ToPagedListAsync(pageNumber, pageSize);*/
 
 
+            //Enum Viewbags
+            ViewData["Large"] = await _context.Posts.Include(p => p.BlogUser).FirstOrDefaultAsync(p => p.PostLocation == Enums.PostLocation.Large);
+            ViewData["Top"] = await _context.Posts.FirstOrDefaultAsync(p => p.PostLocation == Enums.PostLocation.Top);
+            ViewData["BottomLeft"] = await _context.Posts.FirstOrDefaultAsync(p => p.PostLocation == Enums.PostLocation.BottomLeft);
+            ViewData["BottomRight"] = await _context.Posts.FirstOrDefaultAsync(p => p.PostLocation == Enums.PostLocation.BottomRight);
+            
             ViewData["MainText"] = "CK Blogs";
             ViewData["SubText"] = "Follow my Coding Journey";
 

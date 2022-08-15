@@ -6,11 +6,11 @@
 }
 <div class="row justify-content-center">
     <div class="col-md-8">
-       <h1>Create</h1>
+        <h1>Create</h1>
 
-       <h4>Post</h4>
+        <h4>Post</h4>
     </div>
- 
+
 </div>
 
 <hr />
@@ -21,7 +21,7 @@
 
             <div class="form-group pb-2">
                 <label asp-for="BlogId" class="control-label"></label>
-                <select asp-for="BlogId" class ="form-control" asp-items="ViewBag.BlogId"></select>
+                <select asp-for="BlogId" class="form-control" asp-items="ViewBag.BlogId"></select>
             </div>
 
             <div class="form-group pb-2">
@@ -32,13 +32,13 @@
 
             <div class="form-group pb-2">
                 <label asp-for="Abstract" class="control-label"></label>
-                <textarea asp-for="Abstract" class="form-control" ></textarea>
+                <textarea asp-for="Abstract" class="form-control"></textarea>
                 <span asp-validation-for="Abstract" class="text-danger"></span>
             </div>
 
             <div class="form-group pb-2">
                 <label asp-for="Content" class="control-label"></label>
-                <textarea asp-for="Content" class="form-control" ></textarea>
+                <textarea asp-for="Content" class="form-control"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
 
@@ -82,8 +82,14 @@
                 <span asp-validation-for="ReadyStatus" class="text-danger"></span>
             </div>
 
+            <div class="form-group">
+                <label asp-for="PostLocation" class="control-label"></label>
+                <select asp-items="@Html.GetEnumSelectList<PostLocation>()" asp-for="PostLocation" class="form-control"></select>
+                <span asp-validation-for="PostLocation" class="text-danger"></span>
+            </div>
+
             <div class="form-group py-2 d-grid">
-                <button type="submit" class="btn btn-dark btn-small" >Create</button>
+                <button type="submit" class="btn btn-dark btn-small">Create</button>
             </div>
         </form>
     </div>
@@ -105,6 +111,6 @@
         });
     </script>
 
-     <script src="~/js/Custom.js"></script>
+    <script src="~/js/Custom.js"></script>
 
 }

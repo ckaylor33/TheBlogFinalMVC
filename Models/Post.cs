@@ -28,6 +28,9 @@ namespace TheBlogFinalMVC.Models
         [Required]
         public string Content { get; set; }
 
+        [Display(Name = "Post Location")]
+        public PostLocation PostLocation { get; set; }//determines if Post is a main highlight
+
         [DataType(DataType.Date)]
         [Display(Name = "Created Date")]
         public DateTime Created { get; set; }

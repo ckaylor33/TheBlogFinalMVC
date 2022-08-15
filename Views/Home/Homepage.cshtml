@@ -20,12 +20,11 @@
 @if (User.IsInRole(BlogRole.Administrator.ToString()))
 {
     <div class="flex-row d-flex justify-content-between p-2">
-        <h3 class="hover-underline-animation text-muted">
+        <h1 class="hover-underline-animation text-dark fw-bolder">
             <span class="material-icons" style="color: #ff993b">
                 newspaper
-            </span> CK Blogs
-            <span style="font-size: smaller">- Categories</span>
-        </h3>
+            </span> Recent Posts
+        </h1>
         <a class="btn btn-text-warning p-1" asp-action="Create" asp-controller="Posts">
             Create Post
             <span class="material-icons ms-1" style="color: #ff993b">
@@ -38,84 +37,219 @@
 }
 else
 {
-    <div class="flex-row d-flex justify-content-between p-2">
-        <h3 class="hover-underline-animation text-muted">
+    <div class="flex-row d-flex justify-content-start p-2">
+        <h1 class="hover-underline-animation fw-bolder text-dark">
             <span class="material-icons" style="color: #ff993b">
                 newspaper
-            </span> CK Blogs
-            <span style="font-size: smaller">- Categories</span>
-        </h3>
+            </span> Recent Posts
+        </h1>
     </div>
+
+    <hr class="mx-2" />
 }
 
-<div class="row d-flex justify-content-center p-2">
-    @foreach (var blog in Model.Blogs)
-    {
-        <div class="col-sm-12 col-md-6 col-lg-4 my-3">
-            <div class="card card-raised h-100">
-                <a class="ripple-gray" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id">
-                    <div class="img-hover-zoom--brightness">
-                        <img class="card-img-top img-fluid" src="@_imageService.DecodeImage(blog.ImageData, blog.ContentType)" style="width: 100%; height: 300px; object-fit: cover;">
+<!-- =======================
+Main hero START -->
+<section class="py-4 card-grid">
+    <div class="container">
+
+        <div class="row g-4">
+            @if (ViewBag.Large is not null)
+            {
+                <div class="col-lg-6">
+                    <div class="card card-raised img-hover-zoom--brightness card-overlay-bottom overflow-hidden card-grid-lg card-bg-scale" style="background-image:url(@_imageService.DecodeImage(ViewBag.Large.ImageData, ViewBag.Large.ContentType)); background-position: center left; background-size: cover;">
+                        <span class="card-featured" title="Featured post"><i class="fas fa-star"></i></span>
+                        <div class="card-img-overlay d-flex align-items-center">
+                            <div class="w-100 mt-auto">
+
+                                <a class="my-2 h1 fw-bolder text-white text-decoration-none hover-underline-animation" asp-action="Details" asp-controller="Posts" asp-route-slug="@ViewBag.Large.Slug">
+                                    @ViewBag.Large.Title
+                                </a>
+
+                                <p class="text-white">@ViewBag.Large.Created.Date.ToString("dd, MMM yyyy")</p>
+
+                                <h6 class="text-white my-2 pb-2 " id="tooltip"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="top"
+                                title="@ViewBag.Large.Abstract"
+                                data-original-title="@ViewBag.Large.Abstract">
+                                    @ViewBag.Large.Abstract
+                                </h6>
+
+
+
+                                <div class="flex-row p-2 d-flex justify-content-between">
+
+                                    <a class="media " asp-action="About" asp-controller="Home">
+                                        <img class="rounded-circle" src="@_imageService.DecodeImage(ViewBag.Large.BlogUser.ImageData, ViewBag.Large.BlogUser.ContentType)" style="width:40px; height: 40px" />
+                                    </a>
+
+                                    <span class="card-body text-white">by <a class="text-decoration-none fw-bolder text-white hover-underline-animation" asp-action="About" asp-controller="Home">@ViewBag.Large.BlogUser.FirstName</a></span>
+
+
+                                    @if (User.IsInRole(BlogRole.Administrator.ToString()))
+                                    {
+                                        <a class="btn btn-text-warning fw-bolder" asp-action="Edit" asp-controller="Posts" asp-route-id="@ViewBag.Large.Id">Edit Post</a>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </a>
-                <div class="card-body m-1 p-1">
-                    <a class="my-2 card-title text-muted text-decoration-none hover-underline-animation" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id">
-                        @blog.Name
-                    </a>
-                    <p class="card-text">@blog.Created.Date.ToString("dd, MMM yyyy")</p>
-                    <h4 class="card-text card-subtitle my-2 pb-2" id="tooltip"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="@blog.Description"
-                    data-original-title="@blog.Description">
-                        @blog.Description
-                    </h4>
-
-
-
                 </div>
-                <div class="card-footer bg-white flex-row p-2 d-flex justify-content-between">
-                    <div class="card-actions">
+            }
+
+            <!-- Right small cards -->
+            <div class="col-lg-6">
+                <div class="row g-4">
+                    @if (ViewBag.Top is not null)
+                    {
+
+                        <div class="col-12">
+                            <div class="card card-raised img-hover-zoom--brightness overflow-hidden card-bg-scale card-grid-sm" style="background-image:url(@_imageService.DecodeImage(ViewBag.Top.ImageData, ViewBag.Top.ContentType)); background-position: center left; background-size: cover;">
+                                <div class="card-img-overlay d-flex align-items-center">
+                                    <div class="w-100 mt-auto">
+
+                                        <a class="my-2 h1 fw-bolder text-white text-decoration-none hover-underline-animation" asp-action="Details" asp-controller="Posts" asp-route-slug="@ViewBag.Top.Slug">
+                                            @ViewBag.Top.Title
+                                        </a>
+
+                                        <p class="text-white">@ViewBag.Large.Created.Date.ToString("dd, MMM yyyy")</p>
+
+                                        <h6 class="text-white my-2 pb-2 " id="tooltip"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="@ViewBag.Top.Abstract"
+                                        data-original-title="@ViewBag.Top.Abstract">
+                                            @ViewBag.Top.Abstract
+                                        </h6>
 
 
-                        <a class="media" asp-action="About" asp-controller="Home">
-                            <img class="rounded-circle" src="@_imageService.DecodeImage(blog.BlogUser.ImageData, blog.BlogUser.ContentType)" style="width:40px; height: 40px" />
-                        </a>
-                        <span class="card-body text-muted">by <a class="text-decoration-none text-muted hover-underline-animation" asp-action="About" asp-controller="Home">@blog.BlogUser.FirstName</a></span>
 
-                        @if (User.IsInRole(BlogRole.Administrator.ToString()))
-                        {
-                            <a class="btn btn-text-warning" asp-action="Edit" asp-controller="Blogs" asp-route-id="@blog.Id">Edit Blog</a>
-                        }
-                    </div>
+                                        <div class="flex-row p-2 d-flex justify-content-between">
+
+                                            <a class="media " asp-action="About" asp-controller="Home">
+                                                <img class="rounded-circle" src="@_imageService.DecodeImage(ViewBag.Top.BlogUser.ImageData, ViewBag.Top.BlogUser.ContentType)" style="width:40px; height: 40px" />
+                                            </a>
+
+                                            <span class="card-body text-white">by <a class="fw-bolder text-decoration-none text-white hover-underline-animation" asp-action="About" asp-controller="Home">@ViewBag.Top.BlogUser.FirstName</a></span>
+
+
+                                            @if (User.IsInRole(BlogRole.Administrator.ToString()))
+                                            {
+                                                <a class="btn btn-text-warning fw-bolder" asp-action="Edit" asp-controller="Posts" asp-route-id="@ViewBag.Top.Id">Edit Post</a>
+                                            }
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (ViewBag.BottomRight is not null)
+                    {
+                        <!-- Card item START -->
+                        <div class="col-md-6">
+                            <div class="card card-raised img-hover-zoom--brightness overflow-hidden card-grid-sm card-bg-scale" style="background-image:url(@_imageService.DecodeImage(ViewBag.BottomRight.ImageData, ViewBag.BottomRight.ContentType)); background-position: center left; background-size: cover;">
+                                <div class="card-img-overlay d-flex align-items-center">
+                                    <div class="w-100 mt-auto">
+
+                                        <a class="my-2 fw-bolder h1 text-white text-decoration-none hover-underline-animation" asp-action="Details" asp-controller="Posts" asp-route-slug="@ViewBag.BottomRight.Slug">
+                                            @ViewBag.BottomRight.Title
+                                        </a>
+
+                                        <p class="text-white">@ViewBag.BottomRight.Created.Date.ToString("dd, MMM yyyy")</p>
+
+                                        <h6 class="text-white my-2 pb-2 " id="tooltip"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="@ViewBag.BottomRight.Abstract"
+                                        data-original-title="@ViewBag.BottomRight.Abstract">
+                                            @ViewBag.BottomRight.Abstract
+                                        </h6>
+
+
+
+                                        <div class="flex-row p-2 d-flex justify-content-between">
+
+                                            <a class="media " asp-action="About" asp-controller="Home">
+                                                <img class="rounded-circle" src="@_imageService.DecodeImage(ViewBag.BottomRight.BlogUser.ImageData, ViewBag.BottomRight.BlogUser.ContentType)" style="width:40px; height: 40px" />
+                                            </a>
+
+                                            <span class="card-body text-white">by <a class="fw-bolder text-decoration-none text-white hover-underline-animation" asp-action="About" asp-controller="Home">@ViewBag.BottomRight.BlogUser.FirstName</a></span>
+
+
+                                            @if (User.IsInRole(BlogRole.Administrator.ToString()))
+                                            {
+                                                <a class="btn btn-text-warning fw-bolder" asp-action="Edit" asp-controller="Posts" asp-route-id="@ViewBag.BottomRight.Id">Edit Post</a>
+                                            }
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card item END -->
+                    }
+
+                    @if (ViewBag.BottomLeft is not null)
+                    {
+                        <!-- Card item START -->
+                        <div class="col-md-6">
+                            <div class="card card-raised card-grid-sm card-bg-scale img-hover-zoom--brightness overflow-hidden" style="background-image:url(@_imageService.DecodeImage(ViewBag.BottomLeft.ImageData, ViewBag.BottomLeft.ContentType)); background-position: center left; background-size: cover;">
+                                <div class="card-img-overlay d-flex align-items-center">
+                                    <div class="w-100 mt-auto">
+
+                                        <a class="my-2 h1 fw-bolder text-white text-decoration-none hover-underline-animation" asp-action="Details" asp-controller="Posts" asp-route-slug="@ViewBag.BottomLeft.Slug">
+                                            @ViewBag.BottomLeft.Title
+                                        </a>
+
+                                        <p class="text-white">@ViewBag.BottomLeft.Created.Date.ToString("dd, MMM yyyy")</p>
+
+                                        <h6 class="text-white my-2 pb-2 " id="tooltip"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="@ViewBag.BottomLeft.Abstract"
+                                        data-original-title="@ViewBag.BottomLeft.Abstract">
+                                            @ViewBag.BottomLeft.Abstract
+                                        </h6>
+
+
+
+                                        <div class="flex-row p-2 d-flex justify-content-between">
+
+                                            <a class="media " asp-action="About" asp-controller="Home">
+                                                <img class="rounded-circle" src="@_imageService.DecodeImage(ViewBag.BottomLeft.BlogUser.ImageData, ViewBag.BottomLeft.BlogUser.ContentType)" style="width:40px; height: 40px" />
+                                            </a>
+
+                                            <span class="card-body text-white">by <a class="fw-bolder text-decoration-none text-white hover-underline-animation" asp-action="About" asp-controller="Home">@ViewBag.BottomLeft.BlogUser.FirstName</a></span>
+
+
+                                            @if (User.IsInRole(BlogRole.Administrator.ToString()))
+                                            {
+                                                <a class="btn btn-text-warning fw-bolder" asp-action="Edit" asp-controller="Posts" asp-route-id="@ViewBag.BottomLeft.Id">Edit Post</a>
+                                            }
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card item END -->
+                    }
                 </div>
             </div>
         </div>
-    }
-</div>
+    </div>
+</section>
+<!-- =======================
+Main hero END -->
+<!-- =======================-->
+@*
 
-<div class="row d-grid gap-8 justify-content-center py-3">
-
-    <a class="btn btn-raised-warning" asp-action="ProductionReady" asp-controller="Blogs">
-        More Blogs
-        <span class="material-icons">
-            arrow_forward
-        </span>
-    </a>
-</div>
-
-<hr />
-
-<div class="flex-row d-flex justify-content-start p-2">
-    <h3 class="hover-underline-animation text-muted">
-        <span class="material-icons" style="color: #ff993b">
-            newspaper
-        </span> Recent Posts
-
-    </h3>
-</div>
-
-<div class="row d-flex justify-content-center p-2">
+<div class="row d-flex justify-content-center my-2">
     @foreach (var post in Model.Posts)
     {
         <div class="col-sm-12 col-md-6 col-lg-4 my-3">
@@ -159,32 +293,114 @@ else
             </div>
         </div>
 
+</div>
+    }*@
+
+@if (User.IsInRole(nameof(BlogRole.Administrator)))
+{
+    <div class="row d-grid gap-8 justify-content-center py-3">
+        <a class="btn btn-raised-warning" asp-action="AllPosts" asp-controller="Posts">
+            All Posts
+            <span class="material-icons">
+                arrow_forward
+            </span>
+        </a>
+    </div>
+}
+else
+{
+    <div class="row d-grid gap-8 justify-content-center py-3">
+        <a class="btn btn-raised-warning" asp-action="ProductionReady" asp-controller="Posts">
+            All Posts
+            <span class="material-icons">
+                arrow_forward
+            </span>
+        </a>
+    </div>
+}
 
 
-    }
-    @if (User.IsInRole(nameof(BlogRole.Administrator)))
+<div class="flex-row d-flex justify-content-between p-2">
+    <h2 class="hover-underline-animation text-dark fw-bolder">
+        <span class="material-icons" style="color: #ff993b">
+            newspaper
+        </span> Categories
+    </h2>
+</div>
+
+<hr class="mx-2" />
+
+<div class="row d-flex justify-content-center p-2">
+    @foreach (var blog in Model.Blogs)
     {
-        <div class="row d-grid gap-8 justify-content-center py-3">
-            <a class="btn btn-raised-warning" asp-action="AllPosts" asp-controller="Posts">
-                All Posts
-                <span class="material-icons">
-                    arrow_forward
-                </span>
-            </a>
-        </div>
-    }
-    else
-    {
-        <div class="row d-grid gap-8 justify-content-center py-3">
-            <a class="btn btn-raised-warning" asp-action="ProductionReady" asp-controller="Posts">
-                All Posts
-                <span class="material-icons">
-                    arrow_forward
-                </span>
-            </a>
+        <div class="col-sm-12 col-md-6 col-lg-4 my-3">
+            <div class="card card-raised h-100">
+                <a class="ripple-gray" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id">
+                    <div class="img-hover-zoom--brightness">
+                        <img class="card-img-top img-fluid" src="@_imageService.DecodeImage(blog.ImageData, blog.ContentType)" style="width: 100%; height: 300px; object-fit: cover;">
+                    </div>
+                </a>
+                <div class="card-body m-1 p-1">
+                    <a class="my-2 card-title fw-bolder text-dark text-decoration-none hover-underline-animation" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id">
+                        @blog.Name
+                    </a>
+                    <p class="card-text">@blog.Created.Date.ToString("dd, MMM yyyy")</p>
+                    <h4 class="card-subtitle my-2 pb-2" id="tooltip"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="@blog.Description"
+                    data-original-title="@blog.Description">
+                        @blog.Description
+                    </h4>
+
+
+
+                </div>
+                <div class="card-footer bg-white flex-row p-2 d-flex justify-content-between">
+                    <div class="card-actions">
+
+
+                        <a class="media" asp-action="About" asp-controller="Home">
+                            <img class="rounded-circle" src="@_imageService.DecodeImage(blog.BlogUser.ImageData, blog.BlogUser.ContentType)" style="width:40px; height: 40px" />
+                        </a>
+                        <span class="card-body text-dark">by <a class="text-decoration-none text-dark fw-bolder hover-underline-animation" asp-action="About" asp-controller="Home">@blog.BlogUser.FirstName</a></span>
+
+                        @if (User.IsInRole(BlogRole.Administrator.ToString()))
+                        {
+                            <a class="btn btn-text-warning" asp-action="Edit" asp-controller="Blogs" asp-route-id="@blog.Id">Edit Blog</a>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
     }
 </div>
+
+@if (User.IsInRole(nameof(BlogRole.Administrator)))
+{
+    <div class="row d-grid gap-8 justify-content-center py-3">
+        <a class="btn btn-raised-warning" asp-action="Index" asp-controller="Blogs">
+            All Categories
+            <span class="material-icons">
+                arrow_forward
+            </span>
+        </a>
+    </div>
+}
+else
+{
+        <div class="row d-grid gap-8 justify-content-center py-3">
+        <a class="btn btn-raised-warning" asp-action="ProductionReady" asp-controller="Blogs">
+            All Categories
+            <span class="material-icons">
+                arrow_forward
+            </span>
+        </a>
+    </div>
+}
+
+<hr />
+
 
 
 @section Scripts {

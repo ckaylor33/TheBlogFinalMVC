@@ -59,12 +59,12 @@ else
                     <h3 class="mt-2 fw-bolder card-title hover-underline-animation text-dark text-decoration-none">@Model.Post.BlogUser.FullName</h3>
                 </a>
                 <h6 class="">A software Developer based in the UK who specialises in building full stack applications with C# .NET</h6>
-                <div>@Model.Post.Created.ToString("ddd MM, yyyy")</div>
+                <div>@Model.Post.Created.ToString("dd MMM, yyyy")</div>
             </div>
 
             <img class="card-img-top mt-3" src="/images/svg2/Tags Color logo - no background.svg" style="height: 150px;" alt="Tags...">
             <div class="card-body bg-light">
-                <h3 class="fw-bolder card-title mb-2">Popular Tags</h3>
+                <h3 class="fw-bolder card-title mb-2">Trending Tags</h3>
                 <div class="tagView d-flex flex-wrap justify-content-center">
                     @foreach (var tag in Model.Tags.Distinct().Take(12))
                     {
@@ -140,7 +140,7 @@ else
 
                 <div class="col-md-11">
                     <div class="card-body mt-0 pt-0">
-                        <h4>@comment.BlogUser.DisplayName</h4>
+                        <h4>@comment.BlogUser.FullName</h4>
 
                         @****************************************************************
                     SECTION 1: POST ON OR UPDATED ON

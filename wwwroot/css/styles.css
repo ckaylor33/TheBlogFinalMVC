@@ -5512,6 +5512,45 @@ div.code-toolbar > .toolbar .btn-group-lg > span + .dropdown-toggle-split {
         color: #fff;
     }
 
+
+.card-grid .card-grid-lg {
+    height: 560px;
+}
+
+.card-grid .card-grid-sm {
+    height: calc(280px - calc(var(--bs-gutter-y) / 2));
+}
+
+@media (max-width: 767.98px) {
+    .card-grid .card-grid-lg {
+        height: 400px;
+    }
+}
+
+.card-bg-scale {
+    z-index: 99;
+}
+
+    .card-bg-scale::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: inherit;
+        -webkit-transition: all 1s !important;
+        transition: all 1s !important;
+        z-index: -2;
+    }
+
+    .card-bg-scale:hover::after {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+        -webkit-transition: all 1s !important;
+        transition: all 1s !important;
+    }
+
 .card {
     position: relative;
     display: flex;
@@ -5549,6 +5588,43 @@ div.code-toolbar > .toolbar .btn-group-lg > span + .dropdown-toggle-split {
         .card > .card-header + .list-group,
         .card > .list-group + .card-footer {
             border-top: 0;
+        }
+
+    .card.card-overlay-bottom {
+        overflow: hidden;
+    }
+
+        .card.card-overlay-bottom:before {
+            content: "";
+            position: absolute;
+            height: 50%;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(black));
+            background-image: linear-gradient(180deg, transparent, black);
+            z-index: 1;
+        }
+
+    .card .card-img-overlay {
+        z-index: 2;
+    }
+
+    .card.card-overlay-top {
+        overflow: hidden;
+    }
+
+        .card.card-overlay-top:before {
+            content: "";
+            position: absolute;
+            height: 50%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-image: -webkit-gradient(linear, left bottom, left top, from(transparent), to(black));
+            background-image: linear-gradient(0deg, transparent, black);
         }
 
 .card-body {
@@ -5663,6 +5739,20 @@ div.code-toolbar > .toolbar .btn-group-lg > span + .dropdown-toggle-split {
 
 .overlay-blue-gradient {
     background-image: linear-gradient(135deg, rgba(#96deda, 0.5) 0%, rgba(#537895, 0.7) 100%);
+}
+
+.card-featured {
+    position: absolute;
+    z-index: 99;
+    background: #ff993b;
+    color: #fff;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    text-align: center;
+    top: -8px;
+    right: -48px;
+    width: 120px;
+    padding: 16px 0 3px 0;
 }
 
 .card-img,

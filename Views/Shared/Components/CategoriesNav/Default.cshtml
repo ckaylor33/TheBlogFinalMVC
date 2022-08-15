@@ -1,0 +1,18 @@
+﻿@model IEnumerable<TheBlogFinalMVC.Models.Blog>
+@using TheBlogFinalMVC.Enums
+
+
+
+
+@foreach (var blog in Model)
+{
+
+    <div class="collapse" id="collapseCategories" aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
+        <nav class="drawer-menu-nested nav">
+            <a class="nav-link" asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@blog.Id">@blog.Name</a>
+        </nav>
+    </div>
+
+
+}
+

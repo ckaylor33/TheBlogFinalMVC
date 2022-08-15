@@ -20,12 +20,12 @@
 @if (User.IsInRole(BlogRole.Administrator.ToString()))
 {
     <div class="flex-row d-flex justify-content-between p-2">
-        <h3 class="hover-underline-animation text-muted">
+        <h1 class="hover-underline-animation text-dark fw-bolder">
             <span class="material-icons" style="color: #ff993b">
                 newspaper
-            </span> CK Blogs
-            <span style="font-size: smaller">- Categories</span>
-        </h3>
+            </span>
+            Blogs Categories
+        </h1>
         <a class="btn btn-text-warning p-1" asp-action="Create" asp-controller="Blogs">
             Create Blog
             <span class="material-icons ms-1" style="color: #ff993b">
@@ -39,13 +39,15 @@
 else
 {
     <div class="flex-row d-flex justify-content-between p-2">
-        <h3 class="hover-underline-animation text-muted">
+        <h1 class="hover-underline-animation text-dark fw-bolder">
             <span class="material-icons" style="color: #ff993b">
                 newspaper
-            </span> CK Blogs
-            <span style="font-size: smaller">- Categories</span>
-        </h3>
+            </span>
+            Blogs Categories
+        </h1>
     </div>
+
+    <hr class="mx-2"/>
 }
 
 
@@ -60,10 +62,10 @@ else
                     </div>
                 </a>
                 <div class="card-body m-1 p-1">
-                    <a class="my-2 card-title text-muted text-decoration-none hover-underline-animation" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id">
+                    <a class="my-2 card-title text-dark fw-bolder text-decoration-none hover-underline-animation" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id">
                         @blog.Name
                     </a>
-                    <p class="card-text">@blog.Created.Date.ToString("dd, MMM yyyy")</p>
+                    <p class="card-text">@blog.Created.Date.ToString("dd MMM, yyyy")</p>
                     <h4 class="card-text card-subtitle my-2 pb-2" id="tooltip"
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
@@ -80,7 +82,7 @@ else
                         <a class="media" asp-action="About" asp-controller="Home">
                             <img class="rounded-circle" src="@imageService.DecodeImage(blog.BlogUser.ImageData, blog.BlogUser.ContentType)" style="width:40px; height: 40px" />
                         </a>
-                        <span class="card-body text-muted">by <a class="text-decoration-none text-muted hover-underline-animation" asp-action="About" asp-controller="Home">@blog.BlogUser.FirstName</a></span>
+                        <span class="card-body text-dark">by <a class="text-decoration-none text-dark fw-bolder hover-underline-animation" asp-action="About" asp-controller="Home">@blog.BlogUser.FirstName</a></span>
 
                         @if (User.IsInRole(BlogRole.Administrator.ToString()))
                         {

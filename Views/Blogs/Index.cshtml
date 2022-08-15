@@ -57,7 +57,7 @@ else
                     </div>
                 </a>
                 <div class="card-body m-1 p-1">
-                    <a class="my-2 card-title text-muted text-decoration-none hover-underline-animation" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id">
+                    <a class="my-2 card-title text-dark fw-bolder text-decoration-none hover-underline-animation" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id">
                         @blog.Name
                     </a>
                     <p class="card-text">@blog.Created.Date.ToString("dd, MMM yyyy")</p>
@@ -77,7 +77,7 @@ else
                         <a class="media" asp-action="About" asp-controller="Home">
                             <img class="rounded-circle" src="@imageService.DecodeImage(blog.BlogUser.ImageData, blog.BlogUser.ContentType)" style="width:40px; height: 40px" />
                         </a>
-                        <span class="card-body text-muted">by <a class="text-decoration-none text-muted hover-underline-animation" asp-action="About" asp-controller="Home">@blog.BlogUser.FirstName</a></span>
+                        <span class="card-body text-dark">by <a class="text-decoration-none text-dark fw-bolder hover-underline-animation" asp-action="About" asp-controller="Home">@blog.BlogUser.FirstName</a></span>
 
                         @if (User.IsInRole(BlogRole.Administrator.ToString()) || blogUser.Id == blog.BlogUserId)
                         {
