@@ -109,7 +109,7 @@ namespace TheBlogFinalMVC.Controllers
         }
 
         // GET: Posts/Details/5
-
+        [HttpGet]
         public async Task<IActionResult> Details(string slug)
         {
             ViewData["Title"] = "Post Details Page";

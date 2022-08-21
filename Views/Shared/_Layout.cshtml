@@ -47,7 +47,7 @@
 
     <!-- Top app bar navigation menu-->
     <nav class="top-app-bar navbar navbar-expand" style="background-color:#fff">
-        <div class="container-fluid px-4">
+        <div class="container-fluid p-3">
 
             <!-- Drawer toggle button-->
             <button class="btn btn-lg btn-icon order-1 order-lg-0 mx-1" id="drawerToggle" href="javascript:void(0);"><i class="material-icons">menu</i></button>
@@ -161,7 +161,11 @@
                             @if (blogUser?.Id != null)
                             {
                                 <div class="caption">Logged in:</div>
-                                <div class="small fw-500">@blogUser.FullName</div>
+                                <div class="small fw-500">
+                                    <a class="text-decoration-none text-dark hover-underline-animation" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                        @blogUser.FirstName!
+                                    </a>
+                                </div>
                             }
                             else
                             {

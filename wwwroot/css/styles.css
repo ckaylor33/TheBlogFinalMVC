@@ -536,6 +536,12 @@ progress {
     }
 }
 
+@media (max-width: 460px) {
+    li#mobile-nav.nav-item.mobile {
+        display: none !important;
+    }
+}
+
 .display-3 {
     font-size: calc(1.425rem + 2.1vw);
     font-weight: 400;
@@ -5702,7 +5708,7 @@ div.code-toolbar > .toolbar .btn-group-lg > span + .dropdown-toggle-split {
 .img-hover-zoom--brightness img {
     transition: transform 2s, filter 1.5s ease-in-out;
     transform-origin: center center;
-    filter: brightness(90%);
+    filter: brightness(60%);
 }
 
 /* The Transformation */
