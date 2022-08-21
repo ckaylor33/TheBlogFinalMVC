@@ -282,6 +282,7 @@ namespace TheBlogFinalMVC.Controllers
 
                     originalPost.Updated = DateTime.Now;
                     originalPost.Title = post.Title;
+                    originalPost.BlogId = post.BlogId;
                     originalPost.Abstract = post.Abstract;
                     originalPost.Content = post.Content;
                     originalPost.ReadyStatus = post.ReadyStatus;
