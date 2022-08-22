@@ -81,8 +81,8 @@ else
 
                         @if (User.IsInRole(BlogRole.Administrator.ToString()) || blogUser.Id == blog.BlogUserId)
                         {
-                            <a class="btn btn-text-warning" asp-action="Edit" asp-controller="Blogs" asp-route-id="@blog.Id">Edit Blog</a>
-                            <a asp-action="Delete" asp-route-id="@blog.Id" class="btn btn-text-warning">Delete</a>
+                            <a class="btn btn-text-warning" asp-action="Edit" asp-controller="Blogs" asp-route-id="@blog.Id">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@blog.Id" class="btn btn-text-warning fw-bolder">Delete</a>
                         }
                     </div>
                 </div>

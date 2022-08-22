@@ -47,7 +47,7 @@ else
         </h1>
     </div>
 
-    <hr class="mx-2"/>
+    <hr class="mx-2" />
 }
 
 
@@ -77,8 +77,6 @@ else
                 </div>
                 <div class="card-footer bg-white flex-row p-2 d-flex justify-content-between">
                     <div class="card-actions">
-
-
                         <a class="media" asp-action="About" asp-controller="Home">
                             <img class="rounded-circle" src="@imageService.DecodeImage(blog.BlogUser.ImageData, blog.BlogUser.ContentType)" style="width:40px; height: 40px" />
                         </a>
@@ -86,7 +84,9 @@ else
 
                         @if (User.IsInRole(BlogRole.Administrator.ToString()))
                         {
-                            <a class="btn btn-text-warning" asp-action="Edit" asp-controller="Blogs" asp-route-id="@blog.Id">Edit Blog</a>
+                            <a class="btn btn-text-warning fw-bolder" asp-action="Edit" asp-controller="Blogs" asp-route-id="@blog.Id">Edit</a>
+                            <a class="btn btn-text-warning fw-bolder" asp-action="Delete" asp-controller="Blogs" asp-route-id="@blog.Id">Delete</a>
+
                         }
                     </div>
                 </div>

@@ -121,6 +121,7 @@
                                 <div class="nav-link-icon" style="color: #ff993b"><i class="material-icons">post_add</i></div>
                                 Create Post
                             </a>
+
                         }
 
                         <!-- Drawer link (Blogs) -->
@@ -134,6 +135,10 @@
 
                         @if (User.IsInRole("Administrator"))
                         {
+                            <a class="nav-link" asp-controller="Blogs" asp-action="Index">
+                                <div class="nav-link-icon" style="color: #ff993b"><i class="material-icons">feed</i></div>
+                                All Blogs
+                            </a>
                             <!-- Drawer link (Blogs) -->
                             <a class="nav-link" asp-controller="Posts" asp-action="AllPosts">
                                 <div class="nav-link-icon" style="color: #ff993b"><i class="material-icons">feed</i></div>
@@ -142,6 +147,10 @@
                         }
                         else
                         {
+                            <a class="nav-link" asp-controller="Blogs" asp-action="ProductionReady">
+                                <div class="nav-link-icon" style="color: #ff993b"><i class="material-icons">feed</i></div>
+                                All Blogs
+                            </a>
                             <!-- Drawer link (Blogs) -->
                             <a class="nav-link" asp-controller="Posts" asp-action="ProductionReady">
                                 <div class="nav-link-icon" style="color: #ff993b"><i class="material-icons">feed</i></div>
