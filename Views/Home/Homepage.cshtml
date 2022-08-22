@@ -57,9 +57,9 @@ Main hero START -->
             @if (ViewBag.Large is not null)
             {
                 <div class="col-lg-6">
-                    <div class="card card-raised img-hover-zoom--brightness-2 card-overlay-bottom overflow-hidden card-grid-lg card-bg-scale" style="background-image:url(@_imageService.DecodeImage(ViewBag.Large.ImageData, ViewBag.Large.ContentType)); background-position: center left; background-size: cover;">
+                    <div class="card card-raised card-overlay-bottom overflow-hidden card-grid-lg card-bg-scale img-hover-zoom--brightness" style="background-image:url(@_imageService.DecodeImage(ViewBag.Large.ImageData, ViewBag.Large.ContentType)); background-position: center left; background-size: cover;">
                         <span class="card-featured" title="Featured post"><i class="fas fa-star"></i></span>
-                        <div class="card-img-overlay d-flex align-items-center img-hover-zoom--brightness-2">
+                        <div class="card-img-overlay d-flex align-items-center ">
                             <div class="w-100 mt-auto">
 
                                 <a class="my-2 h1 fw-bolder text-white text-decoration-none hover-underline-animation" asp-action="Details" asp-controller="Posts" asp-route-slug="@ViewBag.Large.Slug">
@@ -108,8 +108,8 @@ Main hero START -->
                     {
 
                         <div class="col-12">
-                            <div class="card card-raised img-hover-zoom--brightness-2 overflow-hidden card-bg-scale card-grid-sm" style="background-image:url(@_imageService.DecodeImage(ViewBag.Top.ImageData, ViewBag.Top.ContentType)); background-position: center left; background-size: cover;">
-                                <div class="card-img-overlay d-flex align-items-center img-hover-zoom--brightness-2">
+                            <div class="card card-raised card-overlay-bottom overflow-hidden card-bg-scale card-grid-sm img-hover-zoom--brightness" style="background-image:url(@_imageService.DecodeImage(ViewBag.Top.ImageData, ViewBag.Top.ContentType)); background-position: center left; background-size: cover;">
+                                <div class="card-img-overlay d-flex align-items-center">
                                     <div class="w-100 mt-auto">
 
                                         <a class="my-2 h1 fw-bolder text-white text-decoration-none hover-underline-animation" asp-action="Details" asp-controller="Posts" asp-route-slug="@ViewBag.Top.Slug">
@@ -156,8 +156,8 @@ Main hero START -->
                     {
                         <!-- Card item START -->
                         <div class="col-md-6">
-                            <div class="card card-raised img-hover-zoom--brightness-2 overflow-hidden card-grid-sm card-bg-scale" style="background-image:url(@_imageService.DecodeImage(ViewBag.BottomRight.ImageData, ViewBag.BottomRight.ContentType)); background-position: center left; background-size: cover;">
-                                <div class="card-img-overlay d-flex align-items-center img-hover-zoom--brightness-2">
+                            <div class="card card-raised card-overlay-bottom overflow-hidden card-grid-sm card-bg-scale img-hover-zoom--brightness" style="background-image:url(@_imageService.DecodeImage(ViewBag.BottomRight.ImageData, ViewBag.BottomRight.ContentType)); background-position: center left; background-size: cover;">
+                                <div class="card-img-overlay d-flex align-items-center">
                                     <div class="w-100 mt-auto">
 
                                         <a class="my-2 fw-bolder h2 text-white text-decoration-none hover-underline-animation" asp-action="Details" asp-controller="Posts" asp-route-slug="@ViewBag.BottomRight.Slug">
@@ -204,8 +204,8 @@ Main hero START -->
                     {
                         <!-- Card item START -->
                         <div class="col-md-6">
-                            <div class="card card-raised card-grid-sm card-bg-scale img-hover-zoom--brightness-2 overflow-hidden" style="background-image:url(@_imageService.DecodeImage(ViewBag.BottomLeft.ImageData, ViewBag.BottomLeft.ContentType)); background-position: center left; background-size: cover;">
-                                <div class="card-img-overlay d-flex align-items-center img-hover-zoom--brightness-2">
+                            <div class="card card-raised card-overlay-bottom card-grid-sm card-bg-scale overflow-hidden img-hover-zoom--brightness" style="background-image:url(@_imageService.DecodeImage(ViewBag.BottomLeft.ImageData, ViewBag.BottomLeft.ContentType)); background-position: center left; background-size: cover;">
+                                <div class="card-img-overlay d-flex align-items-center">
                                     <div class="w-100 mt-auto">
 
                                         <a class="my-2 h2 fw-bolder text-white text-decoration-none hover-underline-animation" asp-action="Details" asp-controller="Posts" asp-route-slug="@ViewBag.BottomLeft.Slug">

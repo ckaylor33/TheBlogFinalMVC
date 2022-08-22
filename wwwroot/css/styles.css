@@ -5603,7 +5603,7 @@ div.code-toolbar > .toolbar .btn-group-lg > span + .dropdown-toggle-split {
         .card.card-overlay-bottom:before {
             content: "";
             position: absolute;
-            height: 50%;
+            height: 20%;
             width: 100%;
             bottom: 0;
             left: 0;
@@ -5721,7 +5721,7 @@ div.code-toolbar > .toolbar .btn-group-lg > span + .dropdown-toggle-split {
 .img-hover-zoom--brightness-2 img {
     transition: transform 2s, filter 1.5s ease-in-out;
     transform-origin: center center;
-    filter: brightness(40%);
+    filter: brightness(80%);
 }
 
 /* The Transformation */
