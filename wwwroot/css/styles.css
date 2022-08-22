@@ -5603,7 +5603,7 @@ div.code-toolbar > .toolbar .btn-group-lg > span + .dropdown-toggle-split {
         .card.card-overlay-bottom:before {
             content: "";
             position: absolute;
-            height: 20%;
+            height: 40%;
             width: 100%;
             bottom: 0;
             left: 0;
