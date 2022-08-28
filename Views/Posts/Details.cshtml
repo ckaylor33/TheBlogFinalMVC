@@ -85,15 +85,17 @@ else
 
 
 <article class="d-flex p-2 flex-row border-top border-bottom">
-    <h3 class="fw-bolder col-2">Post Tags</h3>
-    <div class="col flex-grow-1 flex-row d-flex py-2">
-        @foreach (var tag in Model.Post.Tags.Distinct().ToList().Take(6))
-        {
-            <form asp-action="SearchIndex" asp-controller="Posts" method="post">
-                <input type="hidden" value="@tag.Text" name="SearchTerm" />
-                <button class="mb-1 btn btn-sm btn-raised-warning mx-1">#@tag.Text</button>
-            </form>
-        }
+    <div class="col">
+        <h4 class="fw-bolder col-12 card-title text-center">Post Tags</h4>
+        <div class="justify-content-center flex-wrap d-flex tagView">
+            @foreach (var tag in Model.Post.Tags.Distinct().ToList().Take(6))
+            {
+                <form asp-action="SearchIndex" asp-controller="Posts" method="post">
+                    <input type="hidden" value="@tag.Text" name="SearchTerm" />
+                    <button class="mb-1 btn btn-sm btn-raised-warning mx-1">#@tag.Text</button>
+                </form>
+            }
+        </div>
     </div>
 </article>
 
