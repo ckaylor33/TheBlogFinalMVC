@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using TheBlogFinalMVC.Models;
 
-namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
+namespace PersonalBlog.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel
@@ -54,11 +54,8 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
                     "/Account/ConfirmEmail",
                     pageHandler: null,
                     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                    protocol: Request.Scheme);
+                    protocol: "https");
             }
-
-            ViewData["HeaderImage"] = Url.Content("~/images/home-bg.jpg");
-            ViewData["MainText"] = "Confirm Email";
 
             return Page();
         }
