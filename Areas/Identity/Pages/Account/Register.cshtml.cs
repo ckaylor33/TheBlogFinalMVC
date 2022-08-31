@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
@@ -31,14 +30,11 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
         private readonly IImageService _imageService;
         private readonly IConfiguration _configuration;
 
-
         public RegisterModel(
             UserManager<BlogUser> userManager,
             SignInManager<BlogUser> signInManager,
             ILogger<RegisterModel> logger,
-            IBlogEmailSender emailSender,
-            IImageService imageService,
-            IConfiguration configuration)
+            IBlogEmailSender emailSender, IImageService imageService, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -57,22 +53,21 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Display(Name = "Custom Image")]
+            [Display(Name = "Profile Picture")]
             public IFormFile ImageFile { get; set; }
 
             [Required]
             [Display(Name = "First Name")]
-            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and no more than {1} characters long.", MinimumLength = 2)]
+            [StringLength(50, ErrorMessage = "The {0} must be between {2} and {1} characters long.", MinimumLength = 2)]
             public string FirstName { get; set; }
 
             [Required]
             [Display(Name = "Last Name")]
-            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and no more than {1} characters long.", MinimumLength = 2)]
+            [StringLength(50, ErrorMessage = "The {0} must be between {2} and {1} characters long.", MinimumLength = 2)]
             public string LastName { get; set; }
 
-            [Required]
             [Display(Name = "Display Name")]
-            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and no more than {1} characters long.", MinimumLength = 2)]
+            [StringLength(50, ErrorMessage = "The {0} must be between {2} and {1} characters long.", MinimumLength = 2)]
             public string DisplayName { get; set; }
 
             [Required]
@@ -81,7 +76,6 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
@@ -94,12 +88,8 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            ViewData["MainText"] = "Register";
-
             ReturnUrl = returnUrl;
-
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -108,24 +98,24 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                //User is created
                 var user = new BlogUser
                 {
-                    FirstName = Input.FirstName,
-                    LastName = Input.LastName,
-                    DisplayName = Input.DisplayName,
-                    UserName = Input.Email,
-                    Email = Input.Email,
+                    //Gather user input image, if null, use default found in appsettings.json
                     ImageData = (await _imageService.EncodeImageAsync(Input.ImageFile)) ??
                                  await _imageService.EncodeImageAsync(_configuration["DefaultUserImage"]),
                     ContentType = Input.ImageFile is null ?
-                                  Path.GetExtension(_configuration["DefaultUserImage"]) :
-                                  _imageService.ContentType(Input.ImageFile),
+                                    Path.GetExtension(_configuration["DefaultUserImage"]) :
+                                    _imageService.ContentType(Input.ImageFile),
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName,
+                    UserName = Input.Email,
+                    Email = Input.Email
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    ViewData["MainText"] = "Check Email";
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -151,7 +141,6 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
                 }
                 foreach (var error in result.Errors)
                 {
-                    ViewData["MainText"] = "Check Errors";
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
