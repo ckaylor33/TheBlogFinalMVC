@@ -5,6 +5,9 @@ namespace TheBlogFinalMVC.Services
 {
     public interface IBlogEmailSender : IEmailSender
     {
-        Task SendContactEmailAsync(string name, string emailFrom, string htmlMessage, string subject);
+        Task SendContactEmailAsync(string name,
+                                   string emailFrom,
+                                   string htmlMessage,
+                                   string subject);
     }
 }
