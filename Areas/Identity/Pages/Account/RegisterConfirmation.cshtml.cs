@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using TheBlogFinalMVC.Models;
 
-namespace PersonalBlog.Areas.Identity.Pages.Account
+namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel
