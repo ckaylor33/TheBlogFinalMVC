@@ -141,7 +141,7 @@ namespace TheBlogFinalMVC.Areas.Identity.Pages.Account
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("./RegisterConfirmation", new { email = Input.Email });
+                        return RedirectToPage("./RegisterConfirmation");
                     }
                     else
                     {
